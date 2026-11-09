@@ -21,17 +21,22 @@ import {
  */
 
 const STATEMENT =
-  "I architect autonomous agent swarms, hybrid vector-graph retrieval engines, and high-throughput inference infrastructure that run in production. Modern AI requires more than prompt chaining; it demands deterministic tool contracts, verifiable citations, sub-50ms token latency, and self-healing orchestration.";
+  "Ugesh Kumar is a web developer who builds fast, interactive apps. He loves testing modern tools, coding with AI, and solving real user problems. Always learning, he turns good ideas into clean software.";
 
 /** Words rendered with the demo's emphasized treatment. */
 const EMPHASIS = new Set([
-  "autonomous",
-  "hybrid",
-  "high-throughput",
-  "deterministic",
-  "verifiable",
-  "sub-50ms",
-  "self-healing",
+  "web",
+  "developer",
+  "fast",
+  "interactive",
+  "apps",
+  "modern",
+  "tools",
+  "AI",
+  "code",
+  "learning",
+  "clean",
+  "software",
 ]);
 
 const METRIC_ICONS = [
@@ -64,7 +69,7 @@ export const AboutSection: React.FC = () => {
       // Word-by-word colour scrub reading with the scroll position.
       gsap.fromTo(
         textEl.querySelectorAll(".word"),
-        { color: "#52525b", opacity: 0.2 },
+        { color: "#9ca3af", opacity: 0.4 },
         {
           color: "#ffffff",
           opacity: 1,
@@ -101,12 +106,12 @@ export const AboutSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] gap-8 md:gap-12 lg:gap-24 items-center">
           {/* Big word + label */}
           <div className="flex flex-col items-center lg:items-start">
-            <span className="text-[10px] md:text-[11px] uppercase tracking-[0.32em] text-gray-500 mb-4 md:mb-6">
+            <span className="text-xs uppercase tracking-[0.32em] text-gray-400 mb-4 md:mb-6">
               About me
             </span>
             <h2
               data-intro
-              className="text-[18vw] md:text-[9rem] lg:text-[11rem] xl:text-[13rem] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-300 to-gray-800 drop-shadow-2xl leading-[0.85]"
+              className="text-[16vw] md:text-[10rem] lg:text-[14rem] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-300 to-gray-800 drop-shadow-2xl leading-[0.85]"
             >
               Intro
             </h2>
@@ -117,7 +122,7 @@ export const AboutSection: React.FC = () => {
             <p
               data-scrub
               lang="en"
-              className="text-gray-300 text-[15px] sm:text-base md:text-lg lg:text-xl leading-[1.7] md:leading-relaxed font-light text-pretty hyphens-auto"
+              className="text-gray-300 text-sm sm:text-base md:text-lg lg:text-xl leading-[1.7] md:leading-relaxed font-light text-pretty hyphens-auto"
             >
               {words.map((word, i) => (
                 <React.Fragment key={`${word}-${i}`}>
@@ -151,13 +156,13 @@ export const AboutSection: React.FC = () => {
                 <span className="p-2 rounded-xl bg-white/5 border border-white/10">
                   {METRIC_ICONS[idx % METRIC_ICONS.length]}
                 </span>
-                <span className="text-[11px] font-mono uppercase tracking-wider text-gray-400">
+                <span className="text-xs font-mono uppercase tracking-wider text-gray-400">
                   0{idx + 1}
                 </span>
               </div>
               <div
                 style={{ color: idx === 0 ? theme.accent : "#ffffff" }}
-                className="text-2xl sm:text-3xl md:text-4xl font-black font-mono tracking-tight"
+                className="text-2xl md:text-3xl font-black font-mono tracking-tight"
               >
                 {item.value}
               </div>

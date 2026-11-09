@@ -686,7 +686,7 @@ export const InteractivePixelBreakout: React.FC<InteractivePixelBreakoutProps> =
         <div className="mb-4 flex items-center justify-between">
           <p
             style={{ borderColor: accentColor }}
-            className="inline-block pb-1 border-b-2 text-xs sm:text-sm font-semibold tracking-wide text-white/90 uppercase"
+            className="inline-block pb-1 border-b-2 text-xs sm:text-sm font-semibold tracking-wide text-white/90"
           >
             {caption}
           </p>
@@ -723,7 +723,7 @@ export const InteractivePixelBreakout: React.FC<InteractivePixelBreakoutProps> =
         style={{
           touchAction: phase === "playing" ? "none" : "auto",
         }}
-        className={`relative w-full ${panelClassName} select-none outline-none rounded-lg bg-[#050505] border border-white/10 shadow-2xl overflow-hidden focus-visible:ring-2 focus-visible:ring-white/50 ${
+        className={`relative w-full ${panelClassName} select-none outline-none rounded-2xl bg-[#050505] border border-white/10 shadow-2xl overflow-hidden focus-visible:ring-2 focus-visible:ring-white/50 ${
           phase === "playing" ? "cursor-none" : "cursor-pointer"
         }`}
       >
@@ -732,7 +732,7 @@ export const InteractivePixelBreakout: React.FC<InteractivePixelBreakoutProps> =
         {/* Status Badge / Interactive CTA */}
         {phase !== "playing" && (
           <div className="absolute inset-x-0 bottom-4 px-6 flex items-center justify-between pointer-events-none">
-            <span className="text-[11px] sm:text-xs font-mono tracking-wider text-white/40 uppercase bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10">
+            <span className="text-xs font-mono tracking-wider text-white/40 uppercase bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10">
               {phase === "attract" ? "Auto-Play Demo" : "Ready"}
             </span>
 

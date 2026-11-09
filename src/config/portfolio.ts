@@ -10,6 +10,8 @@ export interface Project {
   image?: string;
   demoUrl?: string;
   githubUrl?: string;
+  inDevelopment?: boolean;
+  accentColor?: string;
 }
 
 export interface Metric {
@@ -34,25 +36,48 @@ export interface StackGroup {
   reverse?: boolean;
 }
 
+export interface Certificate {
+  id: string;
+  title: string;
+  issuer: string;
+  date?: string;
+  duration?: string;
+  skills?: string[];
+  description: string;
+  image: string;
+  badge?: string;
+}
+
+export interface Interest {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  iconName: "gamepad" | "code" | "sparkles";
+}
+
 export const PORTFOLIO_CONFIG = {
   profile: {
-    name: "Sree Adithya",
-    firstName: "Sree",
-    lastName: "Adithya",
-    wordmark: "ADITHYA",
+    name: "Ugesh Kumar",
+    firstName: "Ugesh",
+    lastName: "Kumar",
+    wordmark: "UGESH",
     role: {
-      bold: "AI",
-      light: "Architect",
+      bold: "Frontend",
+      light: "Developer",
     },
-    tagline: "Designing resilient multi-agent swarms, low-latency inference pipelines, and enterprise-scale RAG systems.",
-    availability: "Available for Architecture & Advisory",
-    location: "Global / Remote",
-    email: "sreeadithya.ndd@gmail.com",
+    tagline:
+      "Building interactive digital experiences through frontend development, creative problem-solving, and modern technology.",
+    availability: "Available for Frontend Development",
+    location: "Bengaluru, India · Open to Remote",
+    // NOTE: Configurable contact details
+    email: "ugesh.official13@gmail.com",
     portraitUrl: "/portrait.jpg",
+    // NOTE: Configurable social links
     socials: {
-      github: "https://github.com/SreeAdithya123",
-      linkedin: "https://linkedin.com/in/sreeadithya",
-      twitter: "https://x.com/sreeadithya_ai",
+      github: "https://github.com/ugesh13/",
+      linkedin: "https://www.linkedin.com/in/ugesh16",
+      twitter: "",
     },
   },
 
@@ -66,225 +91,293 @@ export const PORTFOLIO_CONFIG = {
 
   metrics: [
     {
-      value: "100M+",
-      label: "Tokens / Day",
-      detail: "Optimized multi-tenant inference cluster throughput",
+      value: "05",
+      label: "Verified Credentials",
+      detail: "Certifications in AI fluency, generative AI, coding foundations & hackathons",
     },
     {
-      value: "99.94%",
-      label: "Agent Tool Reliability",
-      detail: "Self-healing tool routing with dynamic fallback schemas",
+      value: "02",
+      label: "Hackathon Competitions",
+      detail: "Active participant in Smart India Hackathon & AVISHKAR 2026 hackathons",
     },
     {
-      value: "42ms",
-      label: "TTFT (First Token)",
-      detail: "Speculative decoding + KV cache prefix sharing",
+      value: "100%",
+      label: "Hands-on Learning",
+      detail: "Continuous learning and experimentation with frontend & modern AI tools",
     },
     {
-      value: "$1.4M",
-      label: "Compute Savings",
-      detail: "Through targeted SLM distillation & prompt caching",
+      value: "0 → 1",
+      label: "Idea to Prototype",
+      detail: "Turning ideas and requirements into working, interactive digital products",
     },
   ] as Metric[],
 
   capabilities: [
     {
-      title: "Agentic AI & Autonomous Workflows",
-      badge: "Orchestration",
+      title: "Frontend Development & Interactive UI",
+      badge: "Core Engineering",
       description:
-        "Multi-agent systems that plan, reason, and execute end-to-end workflows — with deterministic tool calling, bounded state, human-in-the-loop gates, and long-term memory.",
+        "I build fast web apps using React and modern JavaScript. My focus is clean code, smooth animations, and simple layouts that work on any screen.",
       features: [
-        "Hierarchical planner–executor agents with dynamic tool routing",
-        "Deterministic human-in-the-loop escalation and approval gates",
-        "Agent-to-agent (A2A) coordination with durable, replayable state",
+        "Modular, maintainable React component architecture & hooks",
+        "Responsive cross-device layouts with modern CSS & styling",
+        "Interactive DOM experiences, event handling & dynamic state management",
       ],
-      technologies: ["LangGraph", "Temporal", "A2A", "gRPC", "Python", "Rust"],
+      technologies: ["JavaScript (ES6+)", "React", "HTML5", "CSS3", "DOM API"],
     },
     {
-      title: "Enterprise AI & Private Knowledge Systems",
-      badge: "Knowledge & RAG",
+      title: "AI-Assisted Development & Vibe Coding",
+      badge: "Modern Workflow",
       description:
-        "Private, air-gapped knowledge platforms that turn your documents into grounded answers — hybrid vector and graph retrieval with auditable citations.",
+        "Using AI coding tools and prompt techniques to build prototypes faster. From idea to working code, I build and debug with speed.",
       features: [
-        "Hybrid dense-vector, BM25, and knowledge-graph retrieval",
-        "Role-aware access control with per-document permissions",
-        "Grounded answers with inline, verifiable citations",
+        "Rapid prototyping and vibe coding workflows with AI assistants",
+        "Targeted prompt engineering for UI generation and component scaffolding",
+        "Enhanced development velocity with Claude, Cursor, ChatGPT, Antigravity & Gemini",
       ],
-      technologies: ["Qdrant", "Neo4j", "Milvus", "Cohere Rerank", "LlamaIndex"],
+      technologies: ["Claude", "Antigravity", "Cursor", "ChatGPT", "Gemini", "Prompt Engineering"],
     },
     {
-      title: "Real-Time Voice AI & Conversational Systems",
-      badge: "Voice & Realtime",
+      title: "Data Analytics & Dashboarding",
+      badge: "Analytics & Insights",
       description:
-        "Sub-second voice agents and chat copilots with natural turn-taking, barge-in, and live tool access — built on streaming speech, low-latency inference, and expressive synthesis.",
+        "Turning raw data into clear visual reports. I use Excel formulas and pivot tables to find key trends and help teams make smart choices.",
       features: [
-        "Streaming STT → LLM → TTS pipeline with sub-second latency",
-        "Barge-in, interruption handling, and natural turn detection",
-        "Function calling and live context injection during conversation",
+        "Data analysis, cleaning, and metric formulation",
+        "Advanced Excel formulas, pivot tables, and automated summarization",
+        "Visual reporting dashboards for actionable decision-making",
       ],
-      technologies: ["Whisper", "Deepgram", "ElevenLabs", "WebRTC", "vLLM"],
+      technologies: ["Data Analysis", "Advanced Excel", "Excel Formulas", "Pivot Tables", "Dashboards"],
     },
     {
-      title: "Advanced AI Research & Intelligent Vision",
-      badge: "Research & Vision",
+      title: "Database Querying & Schema Design",
+      badge: "Data Foundations",
       description:
-        "Applied research and computer-vision systems — from custom model training and evaluation to real-time detection, tracking, OCR, and multimodal understanding in production.",
+        "Storing and searching data using SQL and NoSQL. I set up clean database tables so apps load fast and keep records safe.",
       features: [
-        "Custom model design, fine-tuning, and rigorous benchmarking",
-        "Real-time object detection, tracking, and video analytics",
-        "Document intelligence: OCR, layout parsing, and multimodal grounding",
+        "Relational database querying with SQL and table schema modeling",
+        "NoSQL document structures for flexible application data persistence",
+        "Structured data modeling connecting frontend interfaces to databases",
       ],
-      technologies: ["PyTorch", "OpenCV", "TensorRT", "CLIP", "HuggingFace"],
-    },
-    {
-      title: "Edge AI & Intelligent Hardware",
-      badge: "Edge & Devices",
-      description:
-        "On-device intelligence for constrained hardware — quantized models, accelerated inference, and tightly coupled software/hardware pipelines that run offline with minimal power.",
-      features: [
-        "Quantization and distillation (INT4 / FP8) for on-device models",
-        "Accelerated inference on Apple Silicon, NVIDIA Jetson, and NPUs",
-        "Offline-first pipelines with over-the-air model updates",
-      ],
-      technologies: ["ONNX", "GGML", "TensorRT", "Jetson", "CoreML"],
+      technologies: ["SQL", "NoSQL", "Data Modeling", "Relational Schemas"],
     },
   ] as Capability[],
 
   /* Tech stack marquees — one row per layer (About section) */
   stack: [
     {
-      label: "Orchestration",
+      label: "Frontend & UI",
       items: [
-        "LangGraph",
-        "Temporal",
-        "gRPC",
-        "AutoGPT Core",
-        "Multi-Agent",
-        "Tool Calling",
-        "State Machines",
-        "Python",
-        "Rust",
+        "JavaScript (ES6+)",
+        "React",
+        "HTML5",
+        "CSS3",
+        "Component Architecture",
+        "Responsive UI",
+        "State Management",
+        "Interactive DOM",
       ],
       copies: 2,
-      duration: 54,
+      duration: 50,
     },
     {
-      label: "Retrieval",
+      label: "AI Tools & Workflows",
       items: [
-        "Qdrant",
-        "Neo4j",
-        "Milvus",
-        "Cohere Rerank",
-        "LlamaIndex",
-        "Hybrid Search",
-        "BM25",
-        "HNSW",
-        "PostgreSQL",
+        "Vibe Coding",
+        "Prompt Engineering",
+        "Claude",
+        "Antigravity",
+        "Cursor",
+        "ChatGPT",
+        "Gemini",
+        "Rapid Prototyping",
       ],
-      copies: 3,
-      duration: 46,
+      copies: 2,
+      duration: 44,
       reverse: true,
     },
     {
-      label: "Model Efficiency",
+      label: "Data & Analytics",
       items: [
-        "Axolotl",
-        "Unsloth",
-        "HuggingFace",
-        "PyTorch",
-        "vLLM",
-        "QLoRA / LoRA",
-        "Distillation",
-        "ONNX",
+        "Data Analysis",
+        "Advanced Excel",
+        "Excel Formulas",
+        "Pivot Tables",
+        "Dashboards",
+        "Data Modeling",
+        "Reporting",
       ],
       copies: 2,
-      duration: 60,
+      duration: 52,
     },
     {
-      label: "Systems & Cloud",
+      label: "Databases & Strengths",
       items: [
-        "TensorRT-LLM",
-        "vLLM",
-        "Triton Server",
-        "Kubernetes",
-        "Ray",
-        "Docker",
-        "CUDA",
-        "Redis",
-        "Quantization",
+        "SQL",
+        "NoSQL",
+        "Problem Solving",
+        "Turning Ideas to Products",
+        "Rapid Prototyping",
+        "Exploring New Tech",
       ],
-      copies: 3,
-      duration: 50,
+      copies: 2,
+      duration: 46,
       reverse: true,
     },
   ] as StackGroup[],
 
+  certificates: [
+    {
+      id: "linkedin-generative-ai",
+      title: "What Is Generative AI?",
+      issuer: "LinkedIn Learning",
+      date: "August 8, 2026",
+      duration: "1h 3m",
+      skills: ["Generative AI Tools", "Artificial Intelligence (AI)", "Generative AI"],
+      description:
+        "A hands-on introduction to generative AI. Covers core concepts, real-world tools, and how to create AI content.",
+      image: "/certificates/linkedin-learning-generative-ai.jpeg",
+      badge: "AI Foundations",
+    },
+    {
+      id: "sololearn-coding-foundations",
+      title: "Coding Foundations",
+      issuer: "SoloLearn",
+      date: "July 21, 2025",
+      skills: ["Core Programming", "Logic & Structures", "Algorithms Basics"],
+      description:
+        "A foundational course in coding basics. Covers essential logic, clean code, and program structure.",
+      image: "/certificates/sololearn-coding-foundations.jpeg",
+      badge: "Programming",
+    },
+    {
+      id: "anthropic-ai-fluency",
+      title: "AI Fluency: Framework & Foundations",
+      issuer: "Anthropic",
+      date: "2026",
+      skills: ["AI Fluency", "Model Capabilities", "Prompting", "AI Strategy"],
+      description:
+        "An introductory learning program focused on AI fluency, understanding AI capabilities, and developing a more effective approach to working with AI systems.",
+      image: "/certificates/anthropic-ai-fluency.jpeg",
+      badge: "AI Systems",
+    },
+    {
+      id: "sih-2026",
+      title: "Smart India Hackathon 2026",
+      issuer: "JAIN (Deemed-to-be University) / MoE Innovation Cell / AICTE",
+      date: "September 11–12, 2026",
+      skills: ["Rapid Prototyping", "Teamwork", "Problem Solving", "Hackathon"],
+      description:
+        "Certificate of Participation awarded to Ugesh Kumar for participating in the Smart India Hackathon 2026 Internal Hackathon held at JAIN (Deemed-to-be University) – Faculty of Engineering and Technology.",
+      image: "/certificates/smart-india-hackathon-2026.jpeg",
+      badge: "Hackathon",
+    },
+    {
+      id: "avishkar-2026",
+      title: "AVISHKAR 2026 Hackathon",
+      issuer: "JAIN Faculty of Engineering & Technology (FET), Bengaluru",
+      date: "October 31 – November 1, 2026",
+      skills: ["Technical Acumen", "Creative Prototyping", "Hackathon", "Collaboration"],
+      description:
+        "Awarded for creative problem solving and strong technical skills. Earned at the AVISHKAR 2026 Alumni Hackathon.",
+      image: "/certificates/avishkar-hackathon-2026.jpeg",
+      badge: "Hackathon",
+    },
+  ] as Certificate[],
+
+  interests: [
+    {
+      id: "gaming",
+      title: "Gaming",
+      category: "Interactive Worlds",
+      description:
+        "Playing strategy and adventure games. Studying their game mechanics and world design sparks creative ideas for responsive web UI.",
+      iconName: "gamepad",
+    },
+    {
+      id: "building-side-projects",
+      title: "Building Side Projects",
+      category: "Hands-on Creation",
+      description:
+        "Building side projects from scratch. Trying out small apps lets me test new UI ideas, learn fresh tools, and write cleaner code.",
+      iconName: "code",
+    },
+    {
+      id: "exploring-new-tech",
+      title: "Exploring New Technologies",
+      category: "Continuous Learning",
+      description:
+        "I love trying new dev tools and AI assistants like Claude and Cursor. Testing fresh web ideas helps me write better, faster code.",
+      iconName: "sparkles",
+    },
+  ] as Interest[],
+
+  /* Configurable project slots ready for Ugesh's published projects */
   projects: [
     {
-      id: "vyoman-interviewer",
-      title: "Vyoman Interviewer",
-      subtitle: "Voice-powered AI interviews with intelligent candidate evaluation.",
+      id: "momentum-job-tracker",
+      title: "Job Search Momentum",
+      subtitle: "AI-powered job search and career planning that keeps applications moving.",
       description:
-        "Vyoman Interviewer is an AI-powered interview platform designed to simulate realistic interviews through voice interactions. It aims to help candidates practice answering questions, receive feedback, and improve their interview performance.",
-      tags: ["Generative AI", "Voice AI", "LLMs", "ElevenLabs", "Supabase", "React"],
-      category: "AI Apps",
-      image: "/projects/vyoman-interviewer.jpg",
+        "A smart job tracker with a drag-and-drop Kanban board, a visual stage timeline, and 3D career graphics. Analyzes job descriptions and links your technical skills to portfolio code.",
+      tags: ["React", "Three.js", "Node.js", "PostgreSQL", "TailwindCSS"],
+      category: "Full-Stack Web App",
+      image: "/projects/interactive-web-app.jpg",
+      accentColor: "#ff5c3d",
+      demoUrl: "https://momentum-job-tracker.vercel.app/",
+      githubUrl: "https://github.com/ugesh13/Job_Application_Tracker",
+      architecture: [
+        "Dual-mode application tracker with Kanban drag-and-drop and visual stage timeline",
+        "WebGL 3D career object and real-time orbit telemetry built with Three.js",
+        "Evidence matrix correlating technical skills to verified portfolio repositories",
+        "Job description deconstruction into core requirements and application strategy simulator",
+      ],
+      metrics: ["React + Vite", "Three.js 3D", "Neon Postgres"],
     },
     {
-      id: "catalyst-ai",
-      title: "Catalyst AI",
-      subtitle: "Accelerating materials research with artificial intelligence.",
+      id: "citecheck-ai",
+      title: "Evidence-First Brand Governance",
+      subtitle: "Evidence-first brand governance platform where AI suggests and humans decide.",
       description:
-        "Catalyst AI is a scientific research platform concept for exploring chemistry, polymers, and materials science with AI assistance. It aims to support research workflows through intelligent search, research conversations, and materials exploration.",
-      tags: ["Scientific AI", "Chemistry", "LLMs", "Materials Science", "React"],
-      category: "Scientific AI",
-      image: "/projects/catalyst-ai.jpg",
+        "Checks marketing drafts against brand guidelines to catch policy conflicts. Only flags issues when backed by exact quotes from approved sources. Built with React, FastAPI, and SQLModel.",
+      tags: ["React", "FastAPI", "SQLModel", "AI Governance", "TailwindCSS"],
+      category: "AI Brand Governance",
+      image: "/projects/ai-assisted-prototype.jpg",
+      accentColor: "#ff5c3d",
+      demoUrl: "https://citecheck-jet.vercel.app/",
+      githubUrl: "https://github.com/ugesh13/CiteCheck_AI",
+      architecture: [
+        "Five-gate verification pipeline validating exact quotes, fact IDs, and brand rule compliance",
+        "Brand Kit claim repository with proactive date expiry alerts and sign-off enforcement",
+        "Secure Word DOCX parsing and living Guideline Gap Radar for policy remediation",
+        "Strict evidence-first sign-off workflow preventing publication of unverified AI claims",
+      ],
+      metrics: ["117 Tests Passed*", "Five-Gate Engine", "React + FastAPI"],
     },
     {
-      id: "diabetic-foot-ulcer-classification",
-      title: "Hybrid CNN–Transformer for Diabetic Foot Ulcer Classification",
-      subtitle: "Explainable deep learning for medical image classification.",
+      id: "secureclass",
+      title: "Digital Classroom Security",
+      subtitle: "A secure digital classroom and academic assessment management platform.",
       description:
-        "This research project explores a hybrid CNN–Transformer framework for classifying diabetic foot ulcer images. The work focuses on combining visual feature extraction with attention mechanisms to investigate classification performance and model interpretability.",
-      tags: ["Deep Learning", "CNN", "Transformer", "Medical AI", "Computer Vision", "PyTorch"],
-      category: "AI Research",
-      image: "/projects/diabetic-foot-ulcer-classification.jpg",
-    },
-    {
-      id: "ai-daily-study-planner",
-      title: "AI Daily Study Planner",
-      subtitle: "Personalized study planning powered by AI.",
-      description:
-        "An AI-assisted study planning application concept that helps students organize subjects, manage study schedules, and track learning progress. The planned experience combines personalized scheduling, productivity tools, and intelligent learning assistance.",
-      tags: ["Generative AI", "EdTech", "Expo", "React Native", "Supabase", "Productivity"],
-      category: "AI Apps",
-      image: "/projects/ai-daily-study-planner.jpg",
-    },
-    {
-      id: "petsta",
-      title: "Petsta",
-      subtitle: "A smarter digital companion for modern pet care.",
-      description:
-        "Petsta is a pet-care platform concept designed to bring pet profiles, health records, reminders, and community features into one experience. It aims to make everyday pet management more organized and accessible.",
-      tags: ["Pet Tech", "Digital Products", "UI/UX", "Community", "Health Tracking"],
-      category: "Pet Tech",
-      image: "/projects/petsta.jpg",
-    },
-    {
-      id: "parcelflow",
-      title: "ParcelFlow",
-      subtitle: "Smarter parcel management for busy restaurants.",
-      description:
-        "ParcelFlow is a restaurant order-management concept designed to coordinate kitchen preparation, parcel packing, and dispatch. Its planned workflow includes order tracking, packing checklists, and delivery-status monitoring to help reduce operational errors.",
-      tags: ["Workflow Automation", "Restaurant Tech", "Order Management", "React", "Supabase"],
-      category: "Business Automation",
-      image: "/projects/parcelflow.jpg",
+        "A secure web app for online exams and student privacy. Built to prevent test cheating while keeping student records safe. Now in active development.",
+      tags: ["Education Tech", "Security", "Assessment", "In Development"],
+      category: "Academic Security",
+      image: "/projects/analytics-dashboard.jpg",
+      accentColor: "#10b981",
+      githubUrl: "https://github.com/ugesh13/SecureClass",
+      inDevelopment: true,
+      architecture: [
+        "Academic assessment integrity and distraction prevention engine",
+        "Privacy-preserving student data masking and policy enforcement",
+        "Modern classroom management architecture currently under active development",
+      ],
+      metrics: ["In Development", "Academic Focus", "Privacy First"],
     },
   ] as Project[],
 
   breakout: {
-    headline: ["AI THAT", "SHIPS"],
-    caption: "Break the barrier. Autonomous, resilient AI systems.",
+    headline: ["FRONTEND", "DEV"],
+    caption: "Break the barrier. Interactive brick-breaker arcade showcase.",
     startingLives: 3,
   },
 };

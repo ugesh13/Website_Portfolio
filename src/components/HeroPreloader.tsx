@@ -22,7 +22,7 @@ export const HeroPreloader: React.FC<HeroPreloaderProps> = ({ onPreloadComplete 
 
   // Bundle: `let e = "PORTFOLIO", t = y.wordmark` — the dot animation writes
   // the NAME first, it holds, then it morphs left-to-right into "PORTFOLIO".
-  const startWord = profile.wordmark; // e.g. "ADITHYA" — appears first
+  const startWord = profile.wordmark; // e.g. "UGESH" — appears first
   const targetWord = "PORTFOLIO"; // ...then the name turns into this
 
   const [displayText, setDisplayText] = useState(startWord);
@@ -53,10 +53,9 @@ export const HeroPreloader: React.FC<HeroPreloaderProps> = ({ onPreloadComplete 
   // Project thumbnails that make up the portrait tiles
   const thumbSpecs = useMemo(() => {
     const hues: Record<string, number> = {
-      Agents: 18,
-      "RAG & Search": 155,
-      Multimodal: 195,
-      Infrastructure: 265,
+      "Frontend Development": 18,
+      "AI-Assisted Dev": 195,
+      "Data & Analytics": 155,
     };
     return projects.map((p) => ({
       label: p.title.split(" ")[0],
@@ -238,6 +237,7 @@ export const HeroPreloader: React.FC<HeroPreloaderProps> = ({ onPreloadComplete 
           >
             <DotWordAnimation
               word={profile.wordmark}
+              pivotIndex={2}
               className={WORD_CLASS}
               letterClassName={GRADIENT_CLASS}
               dotClassName="bg-gray-200"
@@ -250,7 +250,7 @@ export const HeroPreloader: React.FC<HeroPreloaderProps> = ({ onPreloadComplete 
         {/* Job title, beneath the wordmark (bundle placement) */}
         <p
           ref={roleRef}
-          className="absolute -bottom-8 left-1/2 -translate-x-1/2 md:translate-x-0 md:-bottom-12 md:left-8 text-white text-base md:text-2xl lg:text-4xl drop-shadow-md z-10 opacity-0 w-max"
+          className="absolute -bottom-8 left-1/2 -translate-x-1/2 md:translate-x-0 md:-bottom-12 md:left-8 text-white text-base md:text-2xl lg:text-3xl drop-shadow-md z-10 opacity-0 w-max"
         >
           <span className="font-bold">{profile.role.bold}</span>{" "}
           <span className="font-light italic text-gray-300">{profile.role.light}</span>

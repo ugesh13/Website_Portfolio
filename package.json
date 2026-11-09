@@ -1,5 +1,5 @@
 {
-  "name": "adithya-ai-architect-portfolio",
+  "name": "ugesh-kumar-portfolio",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -12,6 +12,7 @@
     "clsx": "^2.1.1",
     "gsap": "^3.12.7",
     "lucide-react": "^1.16.0",
+    "motion": "^14.10.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.0.2"

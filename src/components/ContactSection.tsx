@@ -26,7 +26,7 @@ const ContactRow: React.FC<{
   const inner = (
     <>
       <span data-row-inner className="min-w-0">
-        <span className="block text-[10px] uppercase tracking-[0.28em] text-gray-500 mb-2">
+        <span className="block text-xs uppercase tracking-[0.28em] text-gray-400 mb-2">
           {label}
         </span>
         <span
@@ -38,7 +38,7 @@ const ContactRow: React.FC<{
         </span>
       </span>
       {href && (
-        <ArrowUpRight className="w-4 h-4 shrink-0 text-gray-500 transition-colors duration-300" />
+        <ArrowUpRight className="w-4 h-4 shrink-0 text-gray-400 transition-colors duration-300" />
       )}
     </>
   );
@@ -128,19 +128,25 @@ export const ContactSection: React.FC = () => {
     return () => cleanups.forEach((fn) => fn());
   });
 
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(profile.email);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(profile.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy email:", err);
+    }
   };
 
   const socials = [
     { label: "GitHub", href: profile.socials.github, Icon: GithubIcon },
     { label: "LinkedIn", href: profile.socials.linkedin, Icon: LinkedinIcon },
-    { label: "X / Twitter", href: profile.socials.twitter, Icon: TwitterIcon },
+    ...(profile.socials.twitter
+      ? [{ label: "X / Twitter", href: profile.socials.twitter, Icon: TwitterIcon }]
+      : []),
   ];
 
-  const headline = ["Let's Build", "Intelligent", "Systems."];
+  const headline = ["Let's Build", "Engaging", "Interfaces."];
 
   return (
     <footer
@@ -163,7 +169,7 @@ export const ContactSection: React.FC = () => {
           {/* Left: CTA */}
           <div className="w-full lg:w-6/12 flex flex-col">
             <div data-reveal className="mb-7">
-              <span className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.06] backdrop-blur-md px-3.5 py-1.5 text-[10px] md:text-[11px] uppercase tracking-[0.26em] text-gray-300">
+              <span className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.06] backdrop-blur-md px-3.5 py-1.5 text-xs uppercase tracking-[0.26em] text-gray-300">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 animate-halo" />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
@@ -174,7 +180,7 @@ export const ContactSection: React.FC = () => {
 
             <h2
               data-reveal-lines
-              className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter drop-shadow-2xl mb-7 leading-[0.95] uppercase"
+              className="text-3xl md:text-5xl font-black tracking-tighter drop-shadow-2xl mb-7 leading-[0.95] uppercase"
             >
               {headline.map((line, i) => (
                 <span
@@ -199,8 +205,8 @@ export const ContactSection: React.FC = () => {
               data-reveal-delay="0.15"
               className="text-gray-300 text-base md:text-lg font-light leading-relaxed max-w-md"
             >
-              Available for AI architecture consulting, autonomous agent design,
-              and enterprise RAG infrastructure reviews.
+              Open to full-time web developer roles and side projects.
+              Let's team up to build clean, useful products together.
             </p>
 
             <div data-reveal-group="0.12" className="flex flex-wrap gap-3 mt-10">
@@ -208,7 +214,7 @@ export const ContactSection: React.FC = () => {
                 data-magnetic="0.28"
                 href={`mailto:${profile.email}`}
                 style={{ backgroundColor: theme.accent }}
-                className="group px-6 py-3.5 rounded-full text-black text-sm font-medium inline-flex items-center gap-2.5 shadow-lg shadow-black/30 transition-[background-color,box-shadow] duration-300 ease-out hover:brightness-110"
+                className="group px-5 py-2.5 rounded-full text-black text-xs font-semibold uppercase tracking-wider inline-flex items-center gap-2 shadow-lg transition-[background-color,box-shadow] duration-300 ease-out hover:brightness-110 active:scale-95 cursor-pointer"
               >
                 Send an email
                 <ArrowUpRight className="w-4 h-4 transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -217,7 +223,7 @@ export const ContactSection: React.FC = () => {
                 type="button"
                 data-magnetic="0.28"
                 onClick={handleCopyEmail}
-                className="group px-6 py-3.5 rounded-full border border-white/25 text-white text-sm inline-flex items-center gap-2.5 backdrop-blur-md transition-[background-color,color,border-color] duration-300 ease-out hover:bg-white hover:text-black hover:border-white cursor-pointer"
+                className="group px-5 py-2.5 rounded-full border border-white/20 text-white text-xs font-semibold uppercase tracking-wider inline-flex items-center gap-2 backdrop-blur-md transition-all duration-300 ease-out hover:bg-white hover:text-black hover:border-white active:scale-95 cursor-pointer"
               >
                 {copied ? (
                   <>
@@ -247,11 +253,11 @@ export const ContactSection: React.FC = () => {
               <ContactRow label="Based in" value={profile.location} />
               <ContactRow
                 label="Focus"
-                value="Agent orchestration · RAG · Inference"
+                value="Frontend Development · React · Interactive UI"
               />
               <div className="px-6 md:px-8 py-6 md:py-7 overflow-hidden">
                 <div data-row-inner>
-                  <p className="text-[10px] uppercase tracking-[0.28em] text-gray-500 mb-4">
+                  <p className="text-xs uppercase tracking-[0.28em] text-gray-400 mb-4">
                     Elsewhere
                   </p>
                   <div className="flex items-center gap-3">
@@ -264,7 +270,7 @@ export const ContactSection: React.FC = () => {
                         rel="noopener noreferrer"
                         aria-label={label}
                         title={label}
-                        className="w-11 h-11 rounded-full border border-white/10 bg-white/[0.07] flex items-center justify-center transition-[background-color,color,border-color] duration-300 ease-out hover:bg-white hover:text-black hover:border-white"
+                        className="w-10 h-10 rounded-full border border-white/10 bg-white/5 text-gray-300 flex items-center justify-center transition-colors duration-300 hover:bg-white hover:text-black hover:border-white"
                       >
                         <Icon className="w-4 h-4" />
                       </a>
@@ -278,8 +284,8 @@ export const ContactSection: React.FC = () => {
       </div>
 
       {/* Sub-footer */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-16 pb-8">
-        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-gray-500">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-16 pb-24 md:pb-28">
+        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-gray-400">
           <div>
             © {new Date().getFullYear()} {profile.name}. All rights reserved.
           </div>

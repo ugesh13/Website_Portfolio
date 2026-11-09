@@ -32,7 +32,7 @@ export const StackMarqueeRow: React.FC<StackGroup> = ({
         {[...repeated, ...repeated].map((item, i) => (
           <span
             key={`${item}-${i}`}
-            className="mx-1 md:mx-1.5 inline-flex items-center gap-2.5 whitespace-nowrap rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-2 md:px-5 md:py-2.5 text-[13px] md:text-[15px] font-medium tracking-wide text-gray-300 transition-colors duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
+            className="mx-1 md:mx-1.5 inline-flex items-center gap-2.5 whitespace-nowrap rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-2 md:px-5 md:py-2.5 text-xs md:text-sm font-medium tracking-wide text-gray-300 transition-colors duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
           >
             <span className="h-1 w-1 shrink-0 rounded-full bg-white/25" />
             {item}
@@ -54,7 +54,7 @@ export const StackMarquee: React.FC<{ groups: StackGroup[] }> = ({
   <div className="relative mt-auto -mx-6 md:-mx-16 pt-10 pb-2 bg-[#030303]">
     <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
     <div className="flex items-center gap-4 px-6 md:px-16 mb-6">
-      <span className="text-[10px] md:text-[11px] uppercase tracking-[0.32em] text-gray-500 whitespace-nowrap">
+      <span className="text-xs uppercase tracking-[0.32em] text-gray-400 whitespace-nowrap">
         The stack
       </span>
       <span className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />

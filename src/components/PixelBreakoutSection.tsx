@@ -32,11 +32,11 @@ export const PixelBreakoutSection: React.FC = () => {
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-4">
             <Gamepad2 className="w-4 h-4 text-[#ff5c3d]" />
-            <span className="text-[11px] font-mono tracking-widest uppercase text-gray-300">
+            <span className="text-xs font-mono tracking-wider uppercase text-gray-300">
               Interactive Arcade Showcase
             </span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-black tracking-tight uppercase">
+          <h2 className="text-3xl md:text-5xl font-black tracking-tight">
             Break It If You Can
           </h2>
           <p className="mt-3 text-sm text-gray-400 max-w-lg mx-auto">
@@ -64,7 +64,7 @@ export const PixelBreakoutSection: React.FC = () => {
               onChange={(e) => setLine1(e.target.value)}
               placeholder="Line 1"
               maxLength={10}
-              className="w-1/2 px-3 py-2 rounded-lg bg-black border border-white/10 text-xs font-mono text-white placeholder-gray-600 focus:outline-none focus:border-[#ff5c3d]"
+              className="w-1/2 px-3 py-2 rounded-xl bg-black border border-white/10 text-xs font-mono text-white placeholder-gray-600 focus:outline-none focus:border-[#ff5c3d]"
             />
             <input
               type="text"
@@ -72,7 +72,7 @@ export const PixelBreakoutSection: React.FC = () => {
               onChange={(e) => setLine2(e.target.value)}
               placeholder="Line 2"
               maxLength={10}
-              className="w-1/2 px-3 py-2 rounded-lg bg-black border border-white/10 text-xs font-mono text-white placeholder-gray-600 focus:outline-none focus:border-[#ff5c3d]"
+              className="w-1/2 px-3 py-2 rounded-xl bg-black border border-white/10 text-xs font-mono text-white placeholder-gray-600 focus:outline-none focus:border-[#ff5c3d]"
             />
           </div>
 
@@ -80,14 +80,14 @@ export const PixelBreakoutSection: React.FC = () => {
             <button
               type="submit"
               style={{ backgroundColor: theme.accent }}
-              className="px-4 py-2 rounded-lg text-xs font-mono font-bold text-black uppercase tracking-wider hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+              className="px-5 py-2.5 rounded-full text-xs font-semibold text-black uppercase tracking-wider inline-flex items-center gap-2 hover:brightness-110 active:scale-95 transition-all cursor-pointer shadow-md"
             >
               Rasterize Custom Text
             </button>
             <button
               type="button"
               onClick={handleReset}
-              className="p-2 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white transition-colors cursor-pointer"
+              className="w-10 h-10 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/15 flex items-center justify-center transition-colors cursor-pointer"
               title="Reset Headline"
             >
               <RotateCcw className="w-4 h-4" />

@@ -70,7 +70,7 @@ export const ServicesSection: React.FC = () => {
         <div className="flex flex-col md:flex-row items-start justify-end gap-2 md:gap-4 lg:gap-8 pr-2 md:pr-0 text-right">
           <h2
             data-reveal-lines
-            className="text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-black tracking-tighter drop-shadow-2xl leading-[1.1] md:leading-[0.9] text-right uppercase"
+            className="text-3xl md:text-5xl font-black tracking-tighter drop-shadow-2xl leading-[1.1] md:leading-[0.95] text-right uppercase"
           >
             {headingLines.map((line) => (
               <span
@@ -120,7 +120,7 @@ export const ServicesSection: React.FC = () => {
                     <div className="flex flex-col w-full min-w-0">
                       <div className="min-h-7 flex items-center md:min-h-10">
                         <h3
-                          className={`text-[11px] sm:text-sm md:text-xl lg:text-2xl font-black uppercase tracking-wide leading-tight transition-colors duration-300 ease-in-out ${
+                          className={`text-xs sm:text-sm md:text-xl lg:text-2xl font-black tracking-tight leading-tight transition-colors duration-300 ease-in-out ${
                             isLit ? "text-[var(--surface-lit-ink)]" : "text-white"
                           }`}
                         >
@@ -142,7 +142,7 @@ export const ServicesSection: React.FC = () => {
                             {item.features.map((feat) => (
                               <li key={feat} className="flex items-start gap-3">
                                 <span
-                                  className={`transition-colors duration-300 ease-in-out mt-1.5 opacity-70 text-[10px] ${
+                                  className={`transition-colors duration-300 ease-in-out mt-1.5 opacity-70 text-xs ${
                                     isLit ? "text-[var(--surface-lit-ink)]" : "text-[var(--accent)]"
                                   }`}
                                 >
