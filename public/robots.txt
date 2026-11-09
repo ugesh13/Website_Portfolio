@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ugesh-kumar.vercel.app/sitemap.xml
+Sitemap: https://ugeshportfolio.vercel.app/sitemap.xml
 

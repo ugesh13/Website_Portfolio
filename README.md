@@ -1,6 +1,6 @@
 # Ugesh Kumar — Frontend Developer Portfolio
 
-> **Live Production:** [ugesh-kumar.vercel.app](https://ugesh-kumar.vercel.app/)  
+> **Live Production:** [ugeshportfolio.vercel.app](https://ugeshportfolio.vercel.app/)  
 > **Target Roles:** Frontend Engineering Internships & Freelance Projects  
 > **Tech Stack:** React 19 · TypeScript · Tailwind CSS v4 · FastAPI · Three.js · GSAP · Vite 6  
 
@@ -35,8 +35,8 @@ Detail-oriented **Computer Science and Business Systems (CSBS)** student at **Ja
 |---|---|---|---|
 | **[Job Search Momentum](https://momentum-job-tracker.vercel.app/)** | React, TypeScript, Three.js, PostgreSQL | AI job search tracker with Kanban board, 3D career graphics, and PostgreSQL backend. | [Demo](https://momentum-job-tracker.vercel.app/) · [GitHub](https://github.com/ugesh13/Job_Application_Tracker) |
 | **[CiteCheck AI](https://citecheck-jet.vercel.app/)** | React, FastAPI, Python, SQLModel, Pytest | Evidence-first brand governance engine where AI suggests and humans decide. 117 automated pytest tests. | [Demo](https://citecheck-jet.vercel.app/) · [GitHub](https://github.com/ugesh13/CiteCheck_AI) |
-| **MemGuard AI** | React, Python, Model Auditing, Tailwind | Fine-tuned model extraction probe simulator and data leakage defense dashboard built for AVISHKAR hackathon. | [GitHub](https://github.com/ugesh13) |
-| **ECG Arrhythmia Detection** | Python, Signal Processing, ML, Web UI | Biomedical signal preprocessing and ML classification pipeline presented to university faculty. | [GitHub](https://github.com/ugesh13) |
+| **MemGuard AI** | React, Python, Model Auditing, Tailwind | Fine-tuned model extraction probe simulator and data leakage defense dashboard built for AVISHKAR hackathon. | *(In Review / Private)* |
+| **[ECG Arrhythmia Detection](https://github.com/ugesh13/ECG_ARRHYTHMIA_ANALYSIS)** | Python, Signal Processing, ML, Web UI | Biomedical signal preprocessing and ML classification pipeline presented to university faculty. | [GitHub](https://github.com/ugesh13/ECG_ARRHYTHMIA_ANALYSIS) |
 | **[Student Performance & XAI](https://github.com/ugesh13/IEEE_Research_Web)** | Python, Machine Learning, Explainable AI | IEEE-style research studying student outcomes on the OULAD dataset using SHAP feature attribution. | [Research Repo](https://github.com/ugesh13/IEEE_Research_Web) |
 | **SecureClass** *(In Development)* | Security, Academic Tech, React | Privacy-preserving digital classroom and academic assessment integrity engine. | [GitHub](https://github.com/ugesh13/SecureClass) |
 

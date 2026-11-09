@@ -112,17 +112,14 @@ export const ProjectsSection: React.FC = () => {
                       style={{ backgroundColor: project.accentColor || theme.accent }}
                     />
                     {project.image && (
-                      <picture>
-                        <source srcSet={project.image} type="image/webp" />
-                        <img
-                          src={project.image.endsWith(".webp") ? project.image.replace(".webp", ".jpg") : project.image}
-                          alt={`${project.title} — screenshot preview`}
-                          width={1200}
-                          height={750}
-                          loading="lazy"
-                          className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover/image:scale-[1.03]"
-                        />
-                      </picture>
+                      <img
+                        src={project.image}
+                        alt={`${project.title} — screenshot preview`}
+                        width={1200}
+                        height={750}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover/image:scale-[1.03]"
+                      />
                     )}
                     <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover/image:opacity-100" />
                     <span className="pointer-events-none absolute bottom-5 right-5 flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-black opacity-0 translate-y-2 transition-all duration-500 group-hover/image:opacity-100 group-hover/image:translate-y-0 shadow-md">
@@ -285,16 +282,13 @@ export const ProjectsSection: React.FC = () => {
               </button>
 
               {activeProject.image && (
-                <picture>
-                  <source srcSet={activeProject.image} type="image/webp" />
-                  <img
-                    src={activeProject.image.endsWith(".webp") ? activeProject.image.replace(".webp", ".jpg") : activeProject.image}
-                    alt={`${activeProject.title} — full interface preview`}
-                    width={1200}
-                    height={750}
-                    className="w-full aspect-[16/10] object-cover rounded-2xl border border-white/10 mb-6"
-                  />
-                </picture>
+                <img
+                  src={activeProject.image}
+                  alt={`${activeProject.title} — full interface preview`}
+                  width={1200}
+                  height={750}
+                  className="w-full aspect-[16/10] object-cover rounded-2xl border border-white/10 mb-6"
+                />
               )}
 
               <span className="text-xs font-mono uppercase tracking-widest text-[#ff5c3d]">
