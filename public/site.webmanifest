@@ -1,0 +1,22 @@
+{
+  "name": "Ugesh Kumar — Frontend Developer",
+  "short_name": "Ugesh Kumar",
+  "description": "Portfolio of Ugesh Kumar, Frontend Developer & CSBS student at Jain University FET.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#ff5c3d",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
+

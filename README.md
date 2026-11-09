@@ -1,74 +1,81 @@
 # Ugesh Kumar — Frontend Developer Portfolio
 
-A high-performance, dark-brutalist portfolio website personalized for **Ugesh Kumar**, Frontend Developer. Built upon the signature interactive template featuring GSAP animations, WebGL tile-mosaic portrait effect, dot-assembled preloader, project showcase & modal, and interactive Pixel Breakout arcade.
+> **Live Production:** [ugesh-kumar.vercel.app](https://ugesh-kumar.vercel.app/)  
+> **Target Roles:** Frontend Engineering Internships & Freelance Projects  
+> **Tech Stack:** React 19 · TypeScript · Tailwind CSS v4 · FastAPI · Three.js · GSAP · Vite 6  
+
+![Ugesh Kumar Portfolio Preview](public/og-image.jpg)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19.0-61dafb?logo=react)](https://react.dev/)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind-4.0-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
+[![Vite](https://img.shields.io/badge/Vite-6.1-646cff?logo=vite)](https://vitejs.dev/)
 
 ---
 
-## ⚡ Tech Stack & Architecture
-
-- **Core**: React 19 + TypeScript + Vite 6
-- **Styling**: Tailwind CSS v4 + Dark Brutalist Theme (`#050505`) + Neon Orange Accent (`#ff5c3d`)
-- **Animation Engine**: GSAP 3 (ScrollTrigger, Timelines, Context)
-- **WebGL Engine**: Custom WebGL2 shader point-cloud mosaic portrait
-- **Interactive Canvas**: Fixed-timestep accumulator canvas arcade engine
-- **Icons**: Lucide React + Custom SVG Brand Glyphs
+## 📌 Repository Topics
+`react` · `typescript` · `vite` · `gsap` · `webgl` · `portfolio` · `tailwindcss` · `threejs` · `fastapi`
 
 ---
 
-## 🌟 Sections & Interactive Experiences
+## 👤 About Ugesh Kumar
 
-1. **Dot-Assembled Hero Preloader (`src/components/HeroPreloader.tsx` + `src/components/DotWordAnimation.tsx`)**:
-   - The wordmark `"UGESH"` is dynamically drawn letter by letter with a playful dot bouncing along the baseline and orbiting the glyphs.
-   - Holds the name, then seamlessly morphs left-to-right into `"PORTFOLIO"`.
-   - GSAP split timeline: heading drops to reveal the job title (`Frontend Developer`), splitting `PORT` / `FOLIO` horizontally around the portrait.
-2. **WebGL Tile-Mosaic Portrait (`src/components/HeroTilePortrait.tsx`)**:
-   - WebGL2 engine rendering point sprites from project color atlases.
-   - Dynamic cursor-repulsion and scroll-reactive scattering.
-   - Neutral studio rim-lit developer silhouette placeholder installed at `public/portrait.jpg` (ready to be swapped with Ugesh's photo anytime).
-3. **Word-by-Word Scrubbed About Section (`src/components/AboutSection.tsx`)**:
-   - Personalized narrative highlighting Ugesh's passion for frontend development, interactive experiences, and vibe coding.
-   - 4-card verified metrics grid: 05 Credentials, 02 Hackathons, 100% Hands-on Learning, 0→1 Idea to Prototype.
-   - Continuous marquee ticker displaying Ugesh's real skills across 4 categorized tracks.
-4. **Services & Capabilities Accordion (`src/components/ServicesSection.tsx`)**:
-   - 4 tailored capability rows: Frontend Development & UI, AI-Assisted Dev & Vibe Coding, Data Analytics & Dashboards, and Database Foundations.
-5. **Verified Certifications & Credentials Gallery (`src/components/CertificatesSection.tsx`)**:
-   - Dedicated certifications gallery showcasing Ugesh's 5 authentic credentials:
-     1. *What Is Generative AI?* (LinkedIn Learning)
-     2. *Coding Foundations* (SoloLearn)
-     3. *AI Fluency: Framework & Foundations* (Anthropic)
-     4. *Smart India Hackathon 2026 Internal Hackathon* (JAIN University / AICTE / MoE Innovation Cell)
-     5. *AVISHKAR 2026 Alumni-Led Hackathon* (JAIN University Faculty of Engineering & Technology)
-   - Interactive Lightbox / Modal with high-res certificate image preview, previous/next controls, keyboard navigation (Escape, Left/Right arrows), and metadata display.
-6. **Featured Projects Showcase & Deep-Dive Modal (`src/components/ProjectsSection.tsx`)**:
-   - Full-width alternating project cards with landscape preview thumbnails, category tags, subtitles, and detail modal.
-   - Configurable project slots with architecture breakdowns and tags.
-7. **Personal Interests & Creative Pursuits (`src/components/InterestsSection.tsx`)**:
-   - Dedicated 3-card showcase highlighting Gaming, Building Side Projects, and Exploring New Technologies.
-8. **Interactive Pixel Breakout Arcade (`src/components/PixelBreakoutSection.tsx`)**:
-   - Destructible ASCII bitmap brick game featuring `"FRONTEND DEV"`.
-   - Autopilot attract mode, interactive play mode with paddle physics, and custom text re-rasterization.
-9. **Contact & Footer (`src/components/ContactSection.tsx`)**:
-   - One-click email copy pill with toast feedback.
-   - Configurable social links (GitHub, LinkedIn).
+Detail-oriented **Computer Science and Business Systems (CSBS)** student at **Jain University Faculty of Engineering and Technology (FET)** in association with **Tata Consultancy Services (TCS)** (Expected Graduation: April 2029, currently Semester 3).
+
+- **Academic Standing:** SGPA **9.09** (Semester 1) · **9.24** (Semester 2)
+- **Primary Focus:** High-performance frontend engineering, interactive web applications, and test-backed backend services.
+- **Availability:** Open to frontend internships (Bengaluru & Remote) and freelance web projects.
 
 ---
 
-## 🚀 Running Locally
+## 🚀 Featured Engineering Projects
+
+| Project | Stack | Key Highlights | Links |
+|---|---|---|---|
+| **[Job Search Momentum](https://momentum-job-tracker.vercel.app/)** | React, TypeScript, Three.js, PostgreSQL | AI job search tracker with Kanban board, 3D career graphics, and PostgreSQL backend. | [Demo](https://momentum-job-tracker.vercel.app/) · [GitHub](https://github.com/ugesh13/Job_Application_Tracker) |
+| **[CiteCheck AI](https://citecheck-jet.vercel.app/)** | React, FastAPI, Python, SQLModel, Pytest | Evidence-first brand governance engine where AI suggests and humans decide. 117 automated pytest tests. | [Demo](https://citecheck-jet.vercel.app/) · [GitHub](https://github.com/ugesh13/CiteCheck_AI) |
+| **MemGuard AI** | React, Python, Model Auditing, Tailwind | Fine-tuned model extraction probe simulator and data leakage defense dashboard built for AVISHKAR hackathon. | [GitHub](https://github.com/ugesh13) |
+| **ECG Arrhythmia Detection** | Python, Signal Processing, ML, Web UI | Biomedical signal preprocessing and ML classification pipeline presented to university faculty. | [GitHub](https://github.com/ugesh13) |
+| **[Student Performance & XAI](https://github.com/ugesh13/IEEE_Research_Web)** | Python, Machine Learning, Explainable AI | IEEE-style research studying student outcomes on the OULAD dataset using SHAP feature attribution. | [Research Repo](https://github.com/ugesh13/IEEE_Research_Web) |
+| **SecureClass** *(In Development)* | Security, Academic Tech, React | Privacy-preserving digital classroom and academic assessment integrity engine. | [GitHub](https://github.com/ugesh13/SecureClass) |
+
+---
+
+## 📜 5 Certificates & Participations
+
+### Course Credentials
+1. **What Is Generative AI?** — LinkedIn Learning (Aug 2026)
+2. **AI Fluency: Framework & Foundations** — Anthropic (Jan 2026)
+3. **Coding Foundations** — SoloLearn (Jul 2025)
+
+### Hackathon Participations
+1. **SIH 2026, Internal Round, JAIN FET** — Smart India Hackathon 2026 Internal Round at JAIN Faculty of Engineering and Technology (FET).
+2. **Certificate of Participation, AVISHKAR 2026 Alumni-Led Hackathon** — JAIN Faculty of Engineering & Technology (FET), Bengaluru (Oct 31 to Nov 1, 2026).
+
+---
+
+## 🛠️ Local Development & Build
 
 ```bash
-# Start the Vite development server
+# Clean install exact dependencies
+npm ci
+
+# Start local development server
 npm run dev
 
-# Build for production
+# Run TypeScript compiler check
+npx tsc -b
+
+# Execute production build
 npm run build
 
-# Preview the production build
+# Preview production build locally
 npm run preview
 ```
 
 ---
 
-## ⚙️ Centralized Configuration
+## 📄 License
 
-All personal details, skills, projects, certificates, and links are managed from:
-👉 **[`src/config/portfolio.ts`](src/config/portfolio.ts)**
+This project is open source and available under the [MIT License](LICENSE).

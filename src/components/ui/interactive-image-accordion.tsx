@@ -7,6 +7,8 @@ export type Certificate = {
   title: string;
   issuer?: string;
   imageUrl: string;
+  width?: number;
+  height?: number;
 };
 
 export interface CertificateAccordionProps {
@@ -96,27 +98,32 @@ export function CertificateAccordion({
               "transition-all duration-700 ease-in-out select-none border",
               "focus-visible:ring-2 focus-visible:ring-[#ff5c3d] focus-visible:ring-offset-2 focus-visible:ring-offset-black",
               isActive
-                ? "flex-[6] min-w-[280px] sm:min-w-[460px] md:min-w-[560px] lg:min-w-[620px] max-w-full border-white/25 shadow-[0_12px_40px_rgba(0,0,0,0.85)] bg-[#070707]"
-                : "flex-1 min-w-[48px] sm:min-w-[58px] md:min-w-[68px] max-w-[60px] sm:max-w-[76px] md:max-w-[84px] border-white/10 hover:border-white/20 bg-[#0c0c0c]"
+                ? "flex-[6] min-w-[200px] xs:min-w-[240px] sm:min-w-[460px] md:min-w-[560px] lg:min-w-[620px] max-w-full border-white/25 shadow-[0_12px_40px_rgba(0,0,0,0.85)] bg-[#070707]"
+                : "flex-1 min-w-[36px] sm:min-w-[58px] md:min-w-[68px] max-w-[50px] sm:max-w-[76px] md:max-w-[84px] border-white/10 hover:border-white/20 bg-[#0c0c0c]"
             )}
           >
             {/* Certificate Image Frame */}
             <div className="relative w-full h-full flex items-center justify-center bg-black/40">
-              <img
-                src={cert.imageUrl}
-                alt={cert.title}
-                loading="lazy"
-                onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.style.opacity = "0.3";
-                }}
-                className={cn(
-                  "w-full h-full transition-all duration-700 ease-in-out",
-                  isActive
-                    ? "object-contain p-2 sm:p-4 drop-shadow-xl"
-                    : "object-cover object-center brightness-60 contrast-105 group-hover:brightness-75 group-hover:scale-105"
-                )}
-              />
+              <picture className="w-full h-full flex items-center justify-center">
+                <source srcSet={cert.imageUrl} type="image/webp" />
+                <img
+                  src={cert.imageUrl.endsWith('.webp') ? cert.imageUrl.replace('.webp', '.jpeg') : cert.imageUrl}
+                  alt={`${cert.title}${cert.issuer ? ` certificate awarded by ${cert.issuer}` : ''}`}
+                  width={cert.width || 1600}
+                  height={cert.height || 1200}
+                  loading="lazy"
+                  onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.style.opacity = "0.3";
+                  }}
+                  className={cn(
+                    "w-full h-full transition-all duration-700 ease-in-out",
+                    isActive
+                      ? "object-contain p-2 sm:p-4 drop-shadow-xl"
+                      : "object-cover object-center brightness-60 contrast-105 group-hover:brightness-75 group-hover:scale-105"
+                  )}
+                />
+              </picture>
 
               {/* Inactive Overlay & Dark Gradient */}
               {!isActive && (
@@ -158,7 +165,7 @@ export function CertificateAccordion({
                   }}
                   title="Open full certificate in lightbox"
                   aria-label="Open full certificate in lightbox"
-                  className="absolute top-3.5 right-3.5 z-20 inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-xs font-semibold text-white uppercase tracking-wider hover:bg-white hover:text-black hover:border-white active:scale-95 transition-all shadow-md cursor-pointer"
+                  className="absolute top-3.5 right-3.5 z-20 inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 py-2.5 min-h-[44px] min-w-[44px] rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-xs font-semibold text-white uppercase tracking-wider hover:bg-white hover:text-black hover:border-white active:scale-95 transition-all shadow-md cursor-pointer"
                 >
                   <Maximize2 className="w-3 h-3 text-[#ff5c3d]" />
                   <span className="hidden sm:inline">Enlarge</span>

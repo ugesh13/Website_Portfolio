@@ -24,7 +24,7 @@ import gsap from "gsap";
 const ATLAS_W = 1024;
 const ATLAS_H = 640;
 const WINDOW_PX = 56;
-const DUST_RATIO = 0.07;
+const DUST_RATIO = 0.0; // Noise specks removed — silhouette tiles only
 
 export interface PortraitThumb {
   /** Short label drawn into the procedural screenshot */
@@ -39,7 +39,13 @@ const clamp = (v: number, lo: number, hi: number) =>
   Math.min(hi, Math.max(lo, v));
 
 /** `Hi = e => Math.min(6, Math.max(3.5, e / 200))` */
-const cellPitch = (width: number) => Math.min(6, Math.max(3.5, width / 200));
+const cellPitch = (width: number) => {
+  const base = Math.min(6, Math.max(3.5, width / 200));
+  if (typeof window !== "undefined" && window.innerWidth < 640) {
+    return base * 1.45; // ~50% tile reduction for smooth 60fps on mobile
+  }
+  return base;
+};
 
 const smoothstep01 = (e0: number, e1: number, x: number) => {
   const t = clamp((x - e0) / (e1 - e0), 0, 1);
@@ -65,6 +71,7 @@ uniform float uScatter;  // 0 = face, 1 = blown back into the air
 uniform vec2 uMouse;     // CSS px, far away when absent
 
 out vec2 vCell;
+out vec2 vHome;
 out float vBright;
 out float vLand;
 out float vAlpha;
@@ -118,6 +125,7 @@ void main() {
   vLand   = land;
   vCell   = aCell.xy;
   vPhase  = phase;
+  vHome   = aHome;
 
   vec2 clip = pos / uRes * 2.0 - 1.0;
   gl_Position  = vec4(clip.x, -clip.y, 0.0, 1.0);
@@ -129,9 +137,11 @@ const FRAGMENT_SHADER = `#version 300 es
 precision highp float;
 
 uniform sampler2D uAtlas;
+uniform sampler2D uPortrait;
 uniform vec2 uWin;     // window size in atlas uv
 uniform float uTime;
 
+in vec2 vHome;
 in vec2 vCell;
 in float vBright;
 in float vLand;
@@ -140,6 +150,16 @@ in float vPhase;
 out vec4 outColor;
 
 void main() {
+  // Sample PNG alpha and DISCARD every tile/point where alpha < 0.5.
+  // Only the head and shoulders silhouette is drawn.
+  vec4 pSample = texture(uPortrait, vHome);
+  if (pSample.a < 0.5) {
+    discard;
+  }
+
+  // Clean, sharp outline with slight 1px feather at the edge
+  float edgeFeather = smoothstep(0.5, 0.7, pSample.a);
+
   vec3 c = texture(uAtlas, vCell + gl_PointCoord * uWin).rgb;
   // Hue from the screenshot, value from the portrait: normalise the sample to
   // full brightness (a dark UI grey becomes white, a dim blue a vivid one),
@@ -151,9 +171,8 @@ void main() {
   float twinkle = 0.9 + 0.1*sin(uTime*1.6 + vPhase*47.0);
   tile *= (0.1 + 0.95*vBright) * twinkle;
 
-  vec3 speck = vec3(0.9, 0.92, 1.0);
-  vec3 rgb = mix(speck, tile, vLand);
-  outColor = vec4(rgb * vAlpha, vAlpha);
+  float finalAlpha = vAlpha * edgeFeather;
+  outColor = vec4(tile * finalAlpha, finalAlpha);
 }
 `;
 
@@ -191,22 +210,6 @@ function renderThumb(spec: PortraitThumb, index: number): HTMLCanvasElement {
   bg.addColorStop(1, `hsl(${(hue + 45) % 360} 55% 8%)`);
   x.fillStyle = bg;
   x.fillRect(0, 0, w, h);
-
-  // Faint grid texture
-  x.strokeStyle = "rgba(255,255,255,0.05)";
-  x.lineWidth = 1;
-  for (let gx = 0; gx <= w; gx += 40) {
-    x.beginPath();
-    x.moveTo(gx + 0.5, 0);
-    x.lineTo(gx + 0.5, h);
-    x.stroke();
-  }
-  for (let gy = 0; gy <= h; gy += 40) {
-    x.beginPath();
-    x.moveTo(0, gy + 0.5);
-    x.lineTo(w, gy + 0.5);
-    x.stroke();
-  }
 
   // Browser chrome
   x.fillStyle = "rgba(0,0,0,0.45)";
@@ -377,9 +380,13 @@ function buildCells(
   const luma = new Float32Array(cols * rows);
   for (let i = 0; i < cols * rows; i++) {
     const t = i * 4;
+    const a = data[t + 3] / 255;
+    if (a < 0.5) {
+      luma[i] = 0;
+      continue;
+    }
     luma[i] =
-      ((0.2126 * data[t] + 0.7152 * data[t + 1] + 0.0722 * data[t + 2]) / 255) *
-      (data[t + 3] / 255);
+      ((0.2126 * data[t] + 0.7152 * data[t + 1] + 0.0722 * data[t + 2]) / 255) * a;
   }
 
   // 2% / 97% percentile normalisation over non-empty pixels
@@ -392,19 +399,20 @@ function buildCells(
   const rowLimit = Math.min(rows, Math.ceil(rows * visibleFrac));
   for (let y = 0; y < rowLimit; y++) {
     for (let x = 0; x < cols; x++) {
+      const idx = (y * cols + x) * 4;
+      const alpha = data[idx + 3] / 255;
+      // DISCARD every tile where alpha < 0.5: only head and shoulders silhouette is drawn
+      if (alpha < 0.5) continue;
+
       const v = luma[y * cols + x];
-      if (v < 0.035 || (v < 0.08 && Math.random() < 0.45)) continue;
+      if (v < 0.035) continue;
       const norm = clamp((v - lo) / (hi - lo), 0, 1);
       const brightness = 0.2 * norm + 0.8 * smoothstep01(0.1, 0.55, norm);
       pushCell((x + 0.5) / cols, (y + 0.5) / rows, brightness, false);
     }
   }
 
-  // Ambient dust
-  const tileCount = home.length / 2;
-  for (let i = 0; i < Math.round(tileCount * DUST_RATIO); i++) {
-    pushCell(0.5, 0.5, 0.3, true);
-  }
+  // Ambient dust removed completely — zero noise tiles
 
   return {
     settle,
@@ -487,11 +495,12 @@ export const HeroTilePortrait: React.FC<HeroTilePortraitProps> = ({
       antialias: false,
     });
 
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const fallback = () => {
       anchor.style.visibility = "visible";
       canvas.style.display = "none";
     };
-    if (!gl) {
+    if (!gl || reduced) {
       fallback();
       return;
     }
@@ -505,6 +514,8 @@ export const HeroTilePortrait: React.FC<HeroTilePortraitProps> = ({
     let portrait: HTMLImageElement | null = null;
     let lastAnchorW = -1;
     let program: WebGLProgram;
+    let texture: WebGLTexture | null = null;
+    let portraitTex: WebGLTexture | null = null;
 
     try {
       program = gl.createProgram()!;
@@ -532,6 +543,7 @@ export const HeroTilePortrait: React.FC<HeroTilePortraitProps> = ({
       scatter: loc("uScatter"),
       mouse: loc("uMouse"),
       atlas: loc("uAtlas"),
+      portrait: loc("uPortrait"),
       win: loc("uWin"),
     };
 
@@ -551,7 +563,6 @@ export const HeroTilePortrait: React.FC<HeroTilePortraitProps> = ({
     gl.uniform2f(u.win, WINDOW_PX / ATLAS_W, WINDOW_PX / ATLAS_H);
 
     const epoch = performance.now() / 1000;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const finePointer = window.matchMedia("(pointer: fine)").matches;
     const setState = (state: string) => {
       if (canvas.dataset.state !== state) canvas.dataset.state = state;
@@ -665,9 +676,38 @@ export const HeroTilePortrait: React.FC<HeroTilePortraitProps> = ({
     });
     observer.observe(canvas);
 
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        setRunning(false);
+      } else {
+        setRunning(visible && cellCount > 0);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (!e.touches.length) return;
+      const t = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      mouse.tx = t.clientX - rect.left;
+      mouse.ty = t.clientY - rect.top;
+      if (mouse.x < -999) {
+        mouse.x = mouse.tx;
+        mouse.y = mouse.ty;
+      }
+    };
+    const onTouchEnd = () => {
+      mouse.tx = mouse.ty = -9999;
+      mouse.x = mouse.y = -9999;
+    };
+
     if (finePointer) {
       window.addEventListener("pointermove", onPointerMove, { passive: true });
       document.addEventListener("pointerleave", onPointerLeave);
+    } else {
+      window.addEventListener("touchmove", onTouchMove, { passive: true });
+      window.addEventListener("touchend", onTouchEnd, { passive: true });
+      window.addEventListener("touchcancel", onTouchEnd, { passive: true });
     }
 
     Promise.all([
@@ -683,7 +723,7 @@ export const HeroTilePortrait: React.FC<HeroTilePortraitProps> = ({
         portrait = img;
 
         const atlas = buildAtlas(thumbCanvases);
-        const texture = gl.createTexture();
+        texture = gl.createTexture();
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
@@ -691,6 +731,17 @@ export const HeroTilePortrait: React.FC<HeroTilePortraitProps> = ({
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, atlas);
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.uniform1i(u.atlas, 0);
+
+        // Portrait cutout texture for shader alpha sampling & edge discard
+        portraitTex = gl.createTexture();
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, portraitTex);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        gl.uniform1i(u.portrait, 1);
 
         rebuild();
         setRunning(visible && cellCount > 0);
@@ -704,9 +755,18 @@ export const HeroTilePortrait: React.FC<HeroTilePortraitProps> = ({
       disposed = true;
       setRunning(false);
       observer.disconnect();
-      window.removeEventListener("pointermove", onPointerMove);
-      document.removeEventListener("pointerleave", onPointerLeave);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      if (finePointer) {
+        window.removeEventListener("pointermove", onPointerMove);
+        document.removeEventListener("pointerleave", onPointerLeave);
+      } else {
+        window.removeEventListener("touchmove", onTouchMove);
+        window.removeEventListener("touchend", onTouchEnd);
+        window.removeEventListener("touchcancel", onTouchEnd);
+      }
       buffers.forEach((buf) => gl.deleteBuffer(buf));
+      if (texture) gl.deleteTexture(texture);
+      if (portraitTex) gl.deleteTexture(portraitTex);
       gl.deleteVertexArray(vao);
       gl.deleteProgram(program);
     };
@@ -717,7 +777,7 @@ export const HeroTilePortrait: React.FC<HeroTilePortraitProps> = ({
       ref={canvasRef}
       role="img"
       aria-label={label}
-      className={`absolute inset-0 w-full h-full pointer-events-none z-10 ${className}`}
+      className={`absolute inset-0 w-full h-full pointer-events-none z-0 ${className}`}
     />
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { PORTFOLIO_CONFIG, type Certificate } from "../config/portfolio";
 import {
@@ -7,28 +7,34 @@ import {
 } from "@/components/ui/interactive-image-accordion";
 import {
   Calendar,
-  Clock,
   X,
   ChevronLeft,
   ChevronRight,
-  Maximize2,
   ExternalLink,
+  Award,
+  Trophy,
+  CheckCircle,
 } from "lucide-react";
 import { useSectionReveals } from "../hooks/useSectionReveals";
 
 export const CertificatesSection: React.FC = () => {
   const { certificates, theme } = PORTFOLIO_CONFIG;
   const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
-  const [activeCert, setActiveCert] = useState<Certificate>(certificates[0]);
+
+  const courseCerts = certificates.filter((c) => c.type === "course");
+  const hackathonCerts = certificates.filter((c) => c.type === "hackathon");
+
+  const [activeCourse, setActiveCourse] = useState<Certificate>(courseCerts[0]);
 
   const sectionRef = useSectionReveals<HTMLElement>();
 
-  // Map portfolio certificates to Accordion item format
-  const accordionItems: AccordionItem[] = certificates.map((c, idx) => ({
+  const accordionItems: AccordionItem[] = courseCerts.map((c, idx) => ({
     id: idx + 1,
     title: c.title,
     issuer: c.issuer,
     imageUrl: c.image,
+    width: c.width,
+    height: c.height,
   }));
 
   // Lock scroll when preview modal is active
@@ -61,6 +67,21 @@ export const CertificatesSection: React.FC = () => {
     ? certificates.findIndex((c) => c.id === selectedCert.id)
     : -1;
 
+  const touchStartX = useRef<number | null>(null);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const diff = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (diff > 45) {
+      handlePrev();
+    } else if (diff < -45) {
+      handleNext();
+    }
+  };
+
   const handlePrev = () => {
     if (currentIndex <= 0) {
       setSelectedCert(certificates[certificates.length - 1]);
@@ -91,15 +112,15 @@ export const CertificatesSection: React.FC = () => {
               style={{ backgroundColor: theme.accent }}
               className="w-1.5 h-1.5 rounded-full"
             />
-            <span className="text-xs font-mono font-medium tracking-wider text-gray-400">
-              Verified Credentials
+            <span className="text-xs font-mono font-medium tracking-wider text-gray-400 uppercase">
+              5 Certificates &amp; Participations
             </span>
           </div>
           <h2
             data-reveal-lines
             className="text-3xl md:text-5xl font-black tracking-tight uppercase"
           >
-            {["Continuous", "Learning"].map((line) => (
+            {["Credentials &", "Participations"].map((line) => (
               <span key={line} className="block overflow-hidden pb-[0.08em]">
                 <span className="line block text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-300 to-gray-800">
                   {line}
@@ -107,135 +128,231 @@ export const CertificatesSection: React.FC = () => {
               </span>
             ))}
           </h2>
-          <p className="mt-4 text-base md:text-lg text-gray-400 font-light max-w-xl">
-            Verified credentials in AI, core programming, and national hackathons. Each badge marks practical skills put to work.
+          <p className="mt-4 text-xs sm:text-sm md:text-base text-gray-400 font-light max-w-xl">
+            Verified learning credentials across AI foundations and core programming, followed by competitive collegiate hackathon participations.
           </p>
         </div>
 
-        {/* Interactive Image-Accordion Strip */}
-        <div data-reveal="up" className="w-full">
+        {/* Row 1: The Three Coursework Credentials */}
+        <div data-reveal="up" className="mb-14">
+          <div className="flex items-center gap-2 mb-6">
+            <Award className="w-4 h-4 text-[#ff5c3d]" />
+            <h3 className="text-sm font-mono uppercase tracking-wider text-gray-200 font-semibold">
+              Course Credentials (3)
+            </h3>
+          </div>
+
           <CertificateAccordion
             items={accordionItems}
             defaultActiveId={1}
             onActiveChange={(item) => {
-              const match = certificates.find(
+              const match = courseCerts.find(
                 (c) => c.image === item.imageUrl || c.title === item.title
               );
-              if (match) setActiveCert(match);
+              if (match) setActiveCourse(match);
             }}
             onCertificateClick={(item) => {
-              const match = certificates.find(
+              const match = courseCerts.find(
                 (c) => c.image === item.imageUrl || c.title === item.title
               );
               if (match) setSelectedCert(match);
             }}
           />
-        </div>
 
-        {/* Dynamic Detail Card for Active Certificate */}
-        {activeCert && (
-          <div
-            data-reveal="up"
-            className="mt-8 p-6 md:p-8 rounded-2xl md:rounded-3xl bg-[#0b0b0b] border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-6 transition-all duration-500 shadow-xl"
-          >
-            <div className="flex-1 min-w-0">
-              <div className="flex flex-wrap items-center gap-3 mb-2.5 text-xs font-mono">
-                <span
-                  style={{
-                    backgroundColor: "rgba(255, 92, 61, 0.15)",
-                    borderColor: "rgba(255, 92, 61, 0.3)",
-                    color: theme.accent,
-                  }}
-                  className="px-2.5 py-1 rounded-full border font-bold uppercase tracking-wider"
-                >
-                  {activeCert.badge || "Verified Credential"}
-                </span>
-                <span className="text-gray-300 font-semibold tracking-wider">
-                  {activeCert.issuer}
-                </span>
-                {activeCert.date && (
-                  <span className="flex items-center gap-1.5 text-gray-400">
-                    <Calendar className="w-3.5 h-3.5" />
-                    {activeCert.date}
+          {/* Active Course Card */}
+          {activeCourse && (
+            <div className="mt-6 p-6 rounded-2xl bg-[#0b0b0b] border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl">
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-wrap items-center gap-3 mb-2 text-xs font-mono">
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#ff5c3d]/15 border border-[#ff5c3d]/30 text-[#ff5c3d] font-bold uppercase tracking-wider">
+                    {activeCourse.badge}
                   </span>
-                )}
-                {activeCert.duration && (
-                  <span className="flex items-center gap-1.5 text-gray-400">
-                    <Clock className="w-3.5 h-3.5" />
-                    {activeCert.duration}
+                  <span className="text-gray-300 font-semibold">
+                    {activeCourse.issuer}
                   </span>
+                  {activeCourse.date && (
+                    <span className="text-gray-400 flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5" />
+                      {activeCourse.date}
+                    </span>
+                  )}
+                </div>
+                <h4 className="text-lg md:text-xl font-bold text-white mb-2">
+                  {activeCourse.title}
+                </h4>
+                <p className="text-xs md:text-sm text-gray-400 font-light leading-relaxed mb-3">
+                  {activeCourse.description}
+                </p>
+                {activeCourse.skills && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {activeCourse.skills.map((s) => (
+                      <span key={s} className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-xs font-mono text-gray-300">
+                        {s}
+                      </span>
+                    ))}
+                  </div>
                 )}
               </div>
 
-              <h3 className="text-xl md:text-2xl font-black text-white tracking-tight mb-2">
-                {activeCert.title}
-              </h3>
-
-              <p className="text-sm text-gray-400 font-light leading-relaxed max-w-3xl mb-4">
-                {activeCert.description}
-              </p>
-
-              {activeCert.skills && activeCert.skills.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {activeCert.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="px-2.5 py-1 rounded-md text-xs font-mono text-gray-300 bg-white/5 border border-white/10"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              )}
+              <div className="flex flex-row md:flex-col gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setSelectedCert(activeCourse)}
+                  className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold uppercase tracking-wider inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  View Full <ExternalLink className="w-3.5 h-3.5" />
+                </button>
+                {activeCourse.verificationUrl && (
+                  <a
+                    href={activeCourse.verificationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 rounded-xl border border-white/10 text-gray-300 hover:text-white text-xs font-mono uppercase tracking-wider inline-flex items-center gap-1.5 transition-colors"
+                  >
+                    Issuer Page ➔
+                  </a>
+                )}
+              </div>
             </div>
+          )}
+        </div>
 
-            <div className="flex items-center gap-3 shrink-0">
-              <button
-                type="button"
-                onClick={() => setSelectedCert(activeCert)}
-                style={{ backgroundColor: theme.accent }}
-                className="px-5 py-2.5 rounded-full text-black text-xs font-semibold uppercase tracking-wider inline-flex items-center gap-2 hover:brightness-110 active:scale-95 transition-all cursor-pointer shadow-md"
-              >
-                <Maximize2 className="w-4 h-4" />
-                View Full Lightbox
-              </button>
-            </div>
+        {/* Row 2: Separate Hackathons Row (2 Participations) */}
+        <div data-reveal="up" className="pt-8 border-t border-white/10">
+          <div className="flex items-center gap-2 mb-6">
+            <Trophy className="w-4 h-4 text-emerald-400" />
+            <h3 className="text-sm font-mono uppercase tracking-wider text-gray-200 font-semibold">
+              Hackathon Participations (2)
+            </h3>
           </div>
-        )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {hackathonCerts.map((hack) => (
+              <div
+                key={hack.id}
+                className="p-6 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-white/20 transition-all flex flex-col justify-between"
+              >
+                <div>
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => setSelectedCert(hack)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setSelectedCert(hack);
+                      }
+                    }}
+                    className="group relative block w-full aspect-[16/11] rounded-xl overflow-hidden border border-white/10 mb-4 cursor-pointer"
+                  >
+                    <picture>
+                      <source srcSet={hack.image} type="image/webp" />
+                      <img
+                        src={hack.image.endsWith(".webp") ? hack.image.replace(".webp", ".jpeg") : hack.image}
+                        alt={`${hack.title} — certificate of participation`}
+                        width={hack.width || 1600}
+                        height={hack.height || 1066}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </picture>
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="px-3 py-1.5 rounded-full bg-black/80 text-white text-xs font-mono">
+                        Click to enlarge
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-semibold">
+                      {hack.badge}
+                    </span>
+                    <span className="text-xs font-mono text-gray-400">{hack.date}</span>
+                  </div>
+
+                  <h4 className="text-base sm:text-lg font-bold text-white mb-1">
+                    {hack.title}
+                  </h4>
+                  <p className="text-xs font-mono text-gray-400 mb-3">{hack.issuer}</p>
+                  <p className="text-xs text-gray-300 leading-relaxed font-light mb-4">
+                    {hack.description}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedCert(hack)}
+                  className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/15 text-gray-200 text-xs font-semibold uppercase tracking-wider inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  View Certificate <ExternalLink className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
-      {/* Lightbox / Modal portaled to document.body */}
-      {selectedCert && typeof document !== "undefined" &&
+      {/* Lightbox Modal with Touch Swipe & Fullscreen on Phones */}
+      {selectedCert &&
+        typeof document !== "undefined" &&
         createPortal(
           <div
             role="dialog"
             aria-modal="true"
-            aria-label={`Certificate preview: ${selectedCert.title}`}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-2xl animate-fade-in-up"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-4 bg-black/90 backdrop-blur-2xl animate-fade-in-up"
             onClick={() => setSelectedCert(null)}
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-4xl bg-[#0e0e0e] border border-white/20 rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl relative flex flex-col max-h-[92vh]"
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+              className="w-full max-w-4xl bg-[#0c0c0c] border border-white/20 rounded-none sm:rounded-3xl overflow-hidden shadow-2xl relative flex flex-col h-full sm:h-auto max-h-[100dvh] sm:max-h-[92vh]"
             >
               {/* Modal Header */}
-              <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-black/40">
-                <div className="flex items-center gap-3">
-                  <span className="px-2.5 py-1 rounded-md bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20 text-xs font-mono font-bold uppercase tracking-wider">
-                    {selectedCert.issuer}
+              <div className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-white/10 flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-mono uppercase tracking-wider text-[#ff5c3d] font-bold">
+                    {selectedCert.badge}
                   </span>
-                  <span className="text-xs font-mono text-gray-400 hidden sm:inline">
-                    {selectedCert.date}
-                  </span>
+                  <h3 className="text-sm sm:text-lg font-bold text-white">
+                    {selectedCert.title}
+                  </h3>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedCert(null)}
+                  className="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                  aria-label="Close dialog"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
+              {/* Modal Certificate Image — pinch-zoom friendly */}
+              <div
+                style={{ touchAction: "pan-x pan-y pinch-zoom" }}
+                className="p-4 md:p-6 flex-1 overflow-auto flex items-center justify-center bg-black/80 min-h-[250px]"
+              >
+                <picture>
+                  <source srcSet={selectedCert.image} type="image/webp" />
+                  <img
+                    src={selectedCert.image.endsWith(".webp") ? selectedCert.image.replace(".webp", ".jpeg") : selectedCert.image}
+                    alt={`${selectedCert.title} certificate awarded by ${selectedCert.issuer}`}
+                    width={selectedCert.width || 1600}
+                    height={selectedCert.height || 1200}
+                    className="max-h-[60vh] w-auto max-w-full object-contain rounded-xl border border-white/10 shadow-2xl"
+                  />
+                </picture>
+              </div>
+
+              {/* Modal Footer with 44px Touch Arrows */}
+              <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-white/10 bg-[#080808] flex items-center justify-between text-xs font-mono text-gray-400">
+                <span className="truncate max-w-[200px] sm:max-w-none">{selectedCert.issuer}</span>
                 <div className="flex items-center gap-2">
-                  {/* Navigation Controls */}
                   <button
                     type="button"
                     onClick={handlePrev}
-                    className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 text-gray-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-                    title="Previous certificate (Left Arrow)"
+                    className="w-11 h-11 rounded-xl bg-white/5 hover:bg-white/15 text-white flex items-center justify-center transition-colors cursor-pointer"
                     aria-label="Previous certificate"
                   >
                     <ChevronLeft className="w-5 h-5" />
@@ -243,84 +360,10 @@ export const CertificatesSection: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleNext}
-                    className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 text-gray-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-                    title="Next certificate (Right Arrow)"
+                    className="w-11 h-11 rounded-xl bg-white/5 hover:bg-white/15 text-white flex items-center justify-center transition-colors cursor-pointer"
                     aria-label="Next certificate"
                   >
                     <ChevronRight className="w-5 h-5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedCert(null)}
-                    className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 text-gray-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer ml-2"
-                    title="Close preview (Escape)"
-                    aria-label="Close dialog"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Modal Image Display */}
-              <div className="p-4 md:p-6 flex-1 overflow-auto flex items-center justify-center bg-black/60 min-h-[300px]">
-                <a
-                  href={selectedCert.image}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group/img relative inline-block cursor-zoom-in"
-                  title="Click to open full high-resolution certificate"
-                >
-                  <img
-                    src={selectedCert.image}
-                    alt={`${selectedCert.title} full certificate preview`}
-                    className="max-h-[62vh] w-auto max-w-full object-contain rounded-xl border border-white/10 shadow-2xl transition-transform duration-300 group-hover/img:scale-[1.01]"
-                  />
-                  <div className="absolute bottom-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-xs font-mono text-white opacity-0 group-hover/img:opacity-100 transition-opacity">
-                    <ExternalLink className="w-3.5 h-3.5 text-[var(--accent)]" /> Click to enlarge
-                  </div>
-                </a>
-              </div>
-
-              {/* Modal Footer Information */}
-              <div className="px-6 py-5 border-t border-white/10 bg-[#0c0c0c] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <h4 className="text-lg md:text-xl font-black tracking-tight text-white mb-1">
-                    {selectedCert.title}
-                  </h4>
-                  <p className="text-xs md:text-sm text-gray-400 font-light max-w-2xl">
-                    {selectedCert.description}
-                  </p>
-                  {selectedCert.skills && (
-                    <div className="flex flex-wrap gap-1.5 mt-2">
-                      {selectedCert.skills.map((s) => (
-                        <span
-                          key={s}
-                          className="px-2 py-0.5 rounded text-xs font-mono bg-white/5 text-gray-300 border border-white/5"
-                        >
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-3 shrink-0">
-                  <a
-                    href={selectedCert.image}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-5 py-2.5 rounded-full border border-white/20 text-xs font-semibold uppercase tracking-wider text-white hover:bg-white hover:text-black hover:border-white active:scale-95 transition-all inline-flex items-center gap-2 cursor-pointer"
-                  >
-                    Open Full Image
-                    <ExternalLink className="w-3.5 h-3.5 text-[var(--accent)]" />
-                  </a>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedCert(null)}
-                    style={{ backgroundColor: theme.accent }}
-                    className="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider text-black transition-all hover:brightness-110 active:scale-95 cursor-pointer shadow-md"
-                  >
-                    Done
                   </button>
                 </div>
               </div>
