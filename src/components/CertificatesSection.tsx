@@ -245,17 +245,14 @@ export const CertificatesSection: React.FC = () => {
                     }}
                     className="group relative block w-full aspect-[16/11] rounded-xl overflow-hidden border border-white/10 mb-4 cursor-pointer"
                   >
-                    <picture>
-                      <source srcSet={hack.image} type="image/webp" />
-                      <img
-                        src={hack.image.endsWith(".webp") ? hack.image.replace(".webp", ".jpeg") : hack.image}
-                        alt={`${hack.title} — certificate of participation`}
-                        width={hack.width || 1600}
-                        height={hack.height || 1066}
-                        loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    </picture>
+                    <img
+                      src={hack.image}
+                      alt={`${hack.title} — certificate of participation`}
+                      width={hack.width || 1600}
+                      height={hack.height || 1066}
+                      loading="lazy"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <span className="px-3 py-1.5 rounded-full bg-black/80 text-white text-xs font-mono">
                         Click to enlarge
@@ -333,16 +330,13 @@ export const CertificatesSection: React.FC = () => {
                 style={{ touchAction: "pan-x pan-y pinch-zoom" }}
                 className="p-4 md:p-6 flex-1 overflow-auto flex items-center justify-center bg-black/80 min-h-[250px]"
               >
-                <picture>
-                  <source srcSet={selectedCert.image} type="image/webp" />
-                  <img
-                    src={selectedCert.image.endsWith(".webp") ? selectedCert.image.replace(".webp", ".jpeg") : selectedCert.image}
-                    alt={`${selectedCert.title} certificate awarded by ${selectedCert.issuer}`}
-                    width={selectedCert.width || 1600}
-                    height={selectedCert.height || 1200}
-                    className="max-h-[60vh] w-auto max-w-full object-contain rounded-xl border border-white/10 shadow-2xl"
-                  />
-                </picture>
+                <img
+                  src={selectedCert.image}
+                  alt={`${selectedCert.title} certificate awarded by ${selectedCert.issuer}`}
+                  width={selectedCert.width || 1600}
+                  height={selectedCert.height || 1200}
+                  className="max-h-[60vh] w-auto max-w-full object-contain rounded-xl border border-white/10 shadow-2xl"
+                />
               </div>
 
               {/* Modal Footer with 44px Touch Arrows */}

@@ -104,26 +104,23 @@ export function CertificateAccordion({
           >
             {/* Certificate Image Frame */}
             <div className="relative w-full h-full flex items-center justify-center bg-black/40">
-              <picture className="w-full h-full flex items-center justify-center">
-                <source srcSet={cert.imageUrl} type="image/webp" />
-                <img
-                  src={cert.imageUrl.endsWith('.webp') ? cert.imageUrl.replace('.webp', '.jpeg') : cert.imageUrl}
-                  alt={`${cert.title}${cert.issuer ? ` certificate awarded by ${cert.issuer}` : ''}`}
-                  width={cert.width || 1600}
-                  height={cert.height || 1200}
-                  loading="lazy"
-                  onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.style.opacity = "0.3";
-                  }}
-                  className={cn(
-                    "w-full h-full transition-all duration-700 ease-in-out",
-                    isActive
-                      ? "object-contain p-2 sm:p-4 drop-shadow-xl"
-                      : "object-cover object-center brightness-60 contrast-105 group-hover:brightness-75 group-hover:scale-105"
-                  )}
-                />
-              </picture>
+              <img
+                src={cert.imageUrl}
+                alt={`${cert.title}${cert.issuer ? ` certificate awarded by ${cert.issuer}` : ''}`}
+                width={cert.width || 1600}
+                height={cert.height || 1200}
+                loading="lazy"
+                onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.style.opacity = "0.3";
+                }}
+                className={cn(
+                  "w-full h-full transition-all duration-700 ease-in-out",
+                  isActive
+                    ? "object-contain p-2 sm:p-4 drop-shadow-xl"
+                    : "object-cover object-center brightness-60 contrast-105 group-hover:brightness-75 group-hover:scale-105"
+                )}
+              />
 
               {/* Inactive Overlay & Dark Gradient */}
               {!isActive && (
