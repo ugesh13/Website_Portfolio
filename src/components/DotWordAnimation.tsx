@@ -330,7 +330,7 @@ export const DotWordAnimation: React.FC<DotWordAnimationProps> = ({
 
   return (
     <div ref={containerRef} aria-hidden="true" className="absolute top-0 left-0 opacity-0">
-      <h1 ref={wordRef} className={className}>
+      <div ref={wordRef} className={className}>
         {letters.map((ch, i) => (
           <span
             key={`${ch}-${i}`}
@@ -342,7 +342,7 @@ export const DotWordAnimation: React.FC<DotWordAnimationProps> = ({
             {ch === " " ? "\u00A0" : ch}
           </span>
         ))}
-      </h1>
+      </div>
       <span
         ref={dotRef}
         className={`absolute rounded-full pointer-events-none ${dotClassName}`}

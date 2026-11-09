@@ -8,7 +8,6 @@ import {
   useReducedMotion,
   type MotionValue,
 } from "motion/react";
-import { PanelBottomOpen, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type DockItem = {
@@ -198,121 +197,51 @@ const FloatingDockMobile: React.FC<{
   activeHref?: string;
   className?: string;
 }> = ({ items, activeHref, className }) => {
-  const [open, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Close on outside click or Escape
-  useEffect(() => {
-    if (!open) return;
-    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false);
-      }
-    };
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [open]);
-
   return (
     <div
-      ref={containerRef}
-      className={cn("relative block md:hidden", className)}
+      className={cn(
+        "flex md:hidden items-center justify-center gap-1 sm:gap-1.5 px-2.5 py-1.5 rounded-full bg-neutral-900/90 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/80 max-w-[calc(100vw-16px)] overflow-x-auto",
+        className
+      )}
     >
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            layoutId="mobile-dock-nav"
-            className="absolute bottom-full mb-3 inset-x-0 flex flex-col gap-2.5 items-center p-2 rounded-2xl bg-neutral-900/90 backdrop-blur-xl border border-white/10 shadow-2xl"
+      {items.map((item) => {
+        const isActive =
+          Boolean(activeHref) &&
+          (activeHref === item.href ||
+            activeHref?.replace("#", "") === item.href.replace("#", ""));
+
+        return (
+          <a
+            key={item.title}
+            href={item.href}
+            aria-label={item.title}
+            title={item.title}
+            onClick={(e) => {
+              if (item.href.startsWith("#")) {
+                e.preventDefault();
+                smoothScrollTo(item.href);
+              }
+            }}
+            className={cn(
+              "w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center relative transition-all duration-200 outline-none shrink-0 touch-manipulation",
+              "focus-visible:ring-2 focus-visible:ring-[#ff5c3d] focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950",
+              isActive
+                ? "bg-neutral-800 border border-[#ff5c3d]/60 text-[#ff5c3d] shadow-[0_0_10px_rgba(255,92,61,0.35)]"
+                : "bg-neutral-800/80 border border-white/10 text-neutral-300 hover:text-white hover:bg-neutral-800"
+            )}
           >
-            {items.map((item, idx) => {
-              const isActive =
-                Boolean(activeHref) &&
-                (activeHref === item.href ||
-                  activeHref?.replace("#", "") === item.href.replace("#", ""));
-
-              return (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, y: 10, scale: 0.8 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{
-                    opacity: 0,
-                    y: 10,
-                    scale: 0.8,
-                    transition: { delay: idx * 0.03 },
-                  }}
-                  transition={{
-                    delay: (items.length - 1 - idx) * 0.04,
-                    type: "spring",
-                    stiffness: 300,
-                    damping: 24,
-                  }}
-                >
-                  <a
-                    href={item.href}
-                    aria-label={item.title}
-                    title={item.title}
-                    onClick={(e) => {
-                      if (item.href.startsWith("#")) {
-                        e.preventDefault();
-                        smoothScrollTo(item.href);
-                      }
-                      setOpen(false);
-                    }}
-                    className={cn(
-                      "h-10 w-10 rounded-full flex items-center justify-center relative transition-all duration-200 outline-none",
-                      "focus-visible:ring-2 focus-visible:ring-[#ff5c3d] focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950",
-                      isActive
-                        ? "bg-neutral-800 border border-[#ff5c3d]/60 text-[#ff5c3d] shadow-[0_0_12px_rgba(255,92,61,0.3)]"
-                        : "bg-neutral-800/90 border border-white/10 text-neutral-300 hover:text-white hover:bg-neutral-800"
-                    )}
-                  >
-                    <div className="h-5 w-5 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full">
-                      {item.icon}
-                    </div>
-                    {isActive && (
-                      <span
-                        aria-hidden="true"
-                        className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-[#ff5c3d] shadow-[0_0_6px_#ff5c3d]"
-                      />
-                    )}
-                  </a>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <button
-        type="button"
-        onClick={() => setOpen((prev) => !prev)}
-        aria-label={open ? "Close navigation menu" : "Open navigation menu"}
-        aria-expanded={open}
-        className={cn(
-          "h-10 w-10 rounded-full bg-neutral-900/90 backdrop-blur-md border border-white/15 flex items-center justify-center text-neutral-200 shadow-2xl transition-all duration-200 hover:text-white active:scale-95 outline-none cursor-pointer",
-          "focus-visible:ring-2 focus-visible:ring-[#ff5c3d] focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950",
-          open && "border-[#ff5c3d]/50 text-[#ff5c3d]"
-        )}
-      >
-        {open ? (
-          <X className="h-5 w-5" />
-        ) : (
-          <PanelBottomOpen className="h-5 w-5" />
-        )}
-      </button>
+            <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full">
+              {item.icon}
+            </div>
+            {isActive && (
+              <span
+                aria-hidden="true"
+                className="absolute -bottom-1 w-1 h-1 rounded-full bg-[#ff5c3d] shadow-[0_0_6px_#ff5c3d]"
+              />
+            )}
+          </a>
+        );
+      })}
     </div>
   );
 };
@@ -327,7 +256,10 @@ export const FloatingDock: React.FC<FloatingDockProps> = ({
   return (
     <nav
       aria-label="Floating Navigation Dock"
-      className={cn("fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-auto", className)}
+      style={{
+        bottom: "max(1rem, calc(0.5rem + env(safe-area-inset-bottom, 0px)))",
+      }}
+      className={cn("fixed left-1/2 -translate-x-1/2 z-50 pointer-events-auto", className)}
     >
       <FloatingDockDesktop
         items={items}

@@ -15,13 +15,111 @@
 
     /* Default for the animated row rule (GSAP tweens this to 0 and back) */
     --rule-scale: 1;
+
+    /* PORTFOLIO word vertical shift offset (chest/torso area clear of head) */
+    --portfolio-offset: 14vh;
+
+    /* Viewport unit definitions with fallbacks */
+    --vh-100: 100vh;
+    --svh-100: 100svh;
+    --dvh-100: 100dvh;
+
+    /* Hero Section & Dock Spacing Variables */
+    --dock-offset: 24px;   /* bottom-6 in FloatingDock */
+    --dock-height: 64px;   /* h-16 in FloatingDockDesktop */
+    --gap-above: 24px;     /* space between bottom of PORTFOLIO and hero-info */
+    --gap-below: 28px;     /* space between bottom of hero-info and top of dock */
   }
 
-  body {
+  @supports not (height: 100dvh) {
+    :root {
+      --svh-100: 100vh;
+      --dvh-100: 100vh;
+    }
+  }
+
+  @media (max-width: 767px) {
+    :root {
+      --dock-height: 48px;
+    }
+  }
+
+  @media (max-height: 650px) {
+    :root {
+      --gap-above: 16px;
+      --gap-below: 20px;
+    }
+  }
+
+  @media (max-height: 500px) and (orientation: landscape) {
+    :root {
+      --portfolio-offset: 4vh;
+      --gap-above: 8px;
+      --gap-below: 10px;
+    }
+  }
+
+  html, body {
     background-color: var(--bg);
     color: #f2efe9;
     font-family: var(--font-sans);
     overflow-x: hidden;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  section[id], div[id] {
+    scroll-margin-top: 5rem;
+  }
+
+  @media (max-width: 768px) {
+    section[id], div[id] {
+      scroll-margin-top: 3.5rem;
+    }
+  }
+}
+
+/* Fallback for browsers lacking backdrop-filter support */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .backdrop-blur-sm,
+  .backdrop-blur,
+  .backdrop-blur-md,
+  .backdrop-blur-lg,
+  .backdrop-blur-xl,
+  .backdrop-blur-2xl {
+    background-color: rgba(12, 12, 12, 0.95) !important;
+  }
+}
+
+/* Touch-friendly interactive hitboxes */
+@media (pointer: coarse) {
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* Accessibility: Visible Focus Outlines */
+:focus-visible {
+  outline: 2px solid var(--accent, #ff5c3d) !important;
+  outline-offset: 3px !important;
+}
+
+/* Accessibility: Text sizing protection (minimum font size >= 12px) */
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Accessibility: Respect prefers-reduced-motion for all CSS animations & transitions */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -137,3 +235,55 @@
 .animate-halo {
   animation: halo 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Hero Centered Name Block (Change 2)
+   ───────────────────────────────────────────────────────────── */
+.hero-name-block {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  z-index: 30;
+  pointer-events: auto;
+}
+
+.hero-name {
+  font-size: clamp(28px, 3vw, 44px);
+  line-height: 1.15;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.hero-tagline {
+  font-size: clamp(11px, 1vw, 13px);
+  white-space: nowrap;
+  margin-top: 8px;
+  color: #e5e7eb;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+  text-align: center;
+}
+
+@media (max-width: 639px) {
+  .hero-tagline {
+    white-space: normal;
+    line-height: 1.45;
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-height: 800px) {
+  .hero-name {
+    font-size: clamp(24px, 2.6vw, 32px);
+  }
+}
+
+.hero-name-block.hide-tagline .hero-tagline {
+  display: none !important;
+}
+

@@ -164,7 +164,7 @@ export function useSectionReveals<T extends HTMLElement = HTMLElement>(
   return ref;
 }
 
-/** Refresh ScrollTrigger once fonts/page finish loading (bundle parity). */
+/** Refresh ScrollTrigger once fonts/page finish loading and on resize/orientationchange. */
 let refreshBound = false;
 export function initScrollRefresh() {
   if (refreshBound || typeof window === "undefined") return;
@@ -174,4 +174,14 @@ export function initScrollRefresh() {
   if (document.readyState === "complete") refresh();
   else window.addEventListener("load", refresh, { once: true });
   document.fonts?.ready.then(refresh);
+
+  let timer: ReturnType<typeof setTimeout>;
+  const debouncedRefresh = () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 200);
+  };
+  window.addEventListener("resize", debouncedRefresh, { passive: true });
+  window.addEventListener("orientationchange", debouncedRefresh, { passive: true });
 }

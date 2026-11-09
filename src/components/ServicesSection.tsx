@@ -1,232 +1,92 @@
-import React, { useState } from "react";
-import gsap from "gsap";
-import { PORTFOLIO_CONFIG } from "../config/portfolio";
+import React from "react";
+import { ArrowUpRight, Code, Zap, Layers } from "lucide-react";
 import { useSectionReveals } from "../hooks/useSectionReveals";
 
-/**
- * What We Can Do — the services we offer, rebuilt as the bundle's
- * `service` section: full-bleed rows with an animated scaleX rule
- * (--rule-scale), a click-to-expand accordion (capabilities left,
- * description + CTA right), desktop hover "lit" state, and the exact
- * entrance timeline from the production bundle:
- *
- *   from(rows, { yPercent:12, opacity:0, dur:.7, ease:power3.out, stagger:.08 })
- *   from(rows, { "--rule-scale":0, dur:.6, ease:power2.out, stagger:.08 }, 0)
- *   trigger: first row, start "top 88%", once
- */
 export const ServicesSection: React.FC = () => {
-  const { capabilities, theme } = PORTFOLIO_CONFIG;
-  const [expanded, setExpanded] = useState<number | null>(null);
-  const [hovered, setHovered] = useState<number | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  const sectionRef = useSectionReveals<HTMLElement>(({ scope }) => {
-    const rows = gsap.utils.toArray<HTMLElement>("[data-service-row]", scope);
-    if (!rows.length) return;
-    gsap
-      .timeline({
-        scrollTrigger: {
-          trigger: rows[0],
-          start: "top 88%",
-          once: true,
-        },
-      })
-      .from(rows, {
-        yPercent: 12,
-        opacity: 0,
-        duration: 0.7,
-        ease: "power3.out",
-        stagger: 0.08,
-      })
-      .from(
-        rows,
-        {
-          "--rule-scale": 0,
-          duration: 0.6,
-          ease: "power2.out",
-          stagger: 0.08,
-        },
-        0
-      );
-  });
-
-  React.useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
-  const headingLines = ["WHAT WE", "CAN DO"];
+  const sectionRef = useSectionReveals<HTMLElement>();
 
   return (
     <section
       ref={sectionRef}
       id="services"
-      className="bg-[#050505] text-white pt-12 pb-0 px-6 md:px-16 flex flex-col relative overflow-hidden border-t border-white/5"
+      className="bg-[#050505] text-white py-20 px-4 sm:px-6 md:px-16 border-t border-white/5 relative overflow-hidden"
     >
-      {/* Right-aligned masked heading — data-reveal-lines */}
-      <div className="flex flex-col md:flex-row items-end md:items-start justify-end w-full mt-0 z-0 pb-12">
-        <div className="flex flex-col md:flex-row items-start justify-end gap-2 md:gap-4 lg:gap-8 pr-2 md:pr-0 text-right">
-          <h2
-            data-reveal-lines
-            className="text-3xl md:text-5xl font-black tracking-tighter drop-shadow-2xl leading-[1.1] md:leading-[0.95] text-right uppercase"
-          >
-            {headingLines.map((line) => (
-              <span
-                key={line}
-                className="block overflow-hidden pb-[0.06em]"
-              >
-                <span className="line block text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-300 to-gray-800">
-                  {line}
-                </span>
+      <div className="max-w-6xl mx-auto">
+        <div data-reveal="up" className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff5c3d]" />
+              <span className="text-xs font-mono font-medium tracking-wider text-gray-400 uppercase">
+                Core Capabilities
               </span>
-            ))}
-          </h2>
-        </div>
-      </div>
-
-      {/* Service rows */}
-      <div className="z-10 relative mt-0 -mx-6 md:-mx-16 border-t border-white/20">
-        {capabilities.map((item, idx) => {
-          const isLit = expanded === idx || (!isMobile && hovered === idx);
-          const isOpen = expanded === idx;
-
-          return (
-            <div
-              key={item.title}
-              data-index={idx}
-              data-service-row
-              className={`service-row relative py-5 md:py-7 px-6 md:px-16 cursor-pointer transition-colors duration-500 ease-out ${
-                isLit ? "bg-[var(--surface-lit)]" : ""
-              }`}
-              onClick={() => setExpanded(isOpen ? null : idx)}
-              onMouseEnter={() => setHovered(idx)}
-              onMouseLeave={() => setHovered(null)}
-            >
-              <div className="flex flex-col lg:flex-row justify-between items-start lg:items-start">
-                {/* Left half: number, title, capabilities */}
-                <div className="flex items-start justify-between w-full lg:w-1/2 gap-2">
-                  <div className="flex items-start gap-3 md:gap-16 w-full min-w-0">
-                    <div className="min-h-7 flex items-center md:min-h-10 flex-shrink-0">
-                      <span
-                        className={`text-lg md:text-3xl font-medium transition-colors duration-300 ease-in-out leading-none ${
-                          isLit ? "text-[var(--surface-lit-ink)]" : "text-white"
-                        }`}
-                      >
-                        {`0${idx + 1}`}
-                      </span>
-                    </div>
-                    <div className="flex flex-col w-full min-w-0">
-                      <div className="min-h-7 flex items-center md:min-h-10">
-                        <h3
-                          className={`text-xs sm:text-sm md:text-xl lg:text-2xl font-black tracking-tight leading-tight transition-colors duration-300 ease-in-out ${
-                            isLit ? "text-[var(--surface-lit-ink)]" : "text-white"
-                          }`}
-                        >
-                          {item.title}
-                        </h3>
-                      </div>
-                      {/* Capabilities (max-h accordion) */}
-                      <div
-                        className={`overflow-hidden transition-all duration-500 ease-in-out w-full ${
-                          isOpen ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
-                        }`}
-                      >
-                        <div className="pt-6 lg:pt-8 flex flex-col gap-3">
-                          <ul
-                            className={`transition-colors duration-300 ease-in-out text-sm md:text-base font-light space-y-2 flex flex-col ${
-                              isLit ? "text-[var(--surface-lit-ink-soft)]" : "text-gray-300"
-                            }`}
-                          >
-                            {item.features.map((feat) => (
-                              <li key={feat} className="flex items-start gap-3">
-                                <span
-                                  className={`transition-colors duration-300 ease-in-out mt-1.5 opacity-70 text-xs ${
-                                    isLit ? "text-[var(--surface-lit-ink)]" : "text-[var(--accent)]"
-                                  }`}
-                                >
-                                  ■
-                                </span>
-                                <span>{feat}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Mobile arrow */}
-                  <div className="min-h-7 flex items-center flex-shrink-0 lg:hidden">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className={`w-6 h-6 transition-all duration-300 ${
-                        isLit ? "text-[var(--surface-lit-ink)]" : "text-[var(--accent)]"
-                      } ${isOpen ? "-rotate-45" : "rotate-45"}`}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-
-                {/* Right half: description + CTA, desktop arrow */}
-                <div className="flex flex-row gap-6 w-full lg:w-1/2 justify-between lg:justify-end relative items-start">
-                  <div
-                    className={`overflow-hidden transition-all duration-500 ease-in-out flex flex-col items-start w-full ${
-                      isOpen ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
-                    }`}
-                  >
-                    <div className="pt-4 md:pt-6 lg:pt-[72px] flex flex-col gap-6 w-full pr-0 lg:pr-12">
-                      <p
-                        className={`transition-colors duration-300 ease-in-out text-base md:text-lg leading-relaxed max-w-lg font-light ${
-                          isLit ? "text-[var(--surface-lit-ink-soft)]" : "text-gray-300"
-                        }`}
-                      >
-                        {item.description}
-                      </p>
-                      <a
-                        href="#contact"
-                        onClick={(e) => e.stopPropagation()}
-                        className={`font-bold uppercase tracking-wider text-xs md:text-sm px-6 py-3 border transition-colors duration-300 ease-in-out flex items-center gap-2 mt-4 ${
-                          isLit
-                            ? "bg-[var(--surface-lit-ink)] text-[var(--surface-lit)] border-[var(--surface-lit-ink)]"
-                            : "bg-[var(--accent)] text-[#050505] border-[var(--accent)]"
-                        }`}
-                      >
-                        <span className="w-2 h-2 border-t border-l border-current" />
-                        Start a Project
-                        <span className="w-2 h-2 border-b border-r border-current" />
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Desktop arrow */}
-                  <div className="hidden lg:flex flex-shrink-0 h-10 items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className={`w-10 h-10 transition-all duration-300 ${
-                        isLit ? "text-[var(--surface-lit-ink)]" : "text-[var(--accent)]"
-                      } ${isOpen ? "-rotate-45" : "rotate-45"}`}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
             </div>
-          );
-        })}
+            <h2 className="text-3xl md:text-5xl font-black tracking-tight uppercase">
+              What I Do
+            </h2>
+          </div>
+          <a
+            href="#contact"
+            className="px-6 py-2.5 rounded-full bg-[#ff5c3d] text-black text-xs font-bold uppercase tracking-wider inline-flex items-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-md self-start md:self-auto cursor-pointer"
+          >
+            Let's talk <ArrowUpRight className="w-4 h-4" />
+          </a>
+        </div>
+
+        {/* Two focused engineering capabilities */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div data-reveal="up" className="p-5 sm:p-8 rounded-3xl bg-white/[0.025] border border-white/10 hover:border-white/20 transition-all flex flex-col justify-between">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-[#ff5c3d]/10 border border-[#ff5c3d]/20 flex items-center justify-center text-[#ff5c3d] mb-4">
+                <Code className="w-5 h-5" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">
+                Frontend Development &amp; Interactive UI
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed mb-4">
+                I build fast, accessible web applications using React, TypeScript, and modern CSS. My priority is clean modular components, smooth responsive layouts, and bug-free user experiences that feel natural on any device.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-1.5 pt-4 border-t border-white/5 text-xs font-mono text-gray-400">
+              <span className="px-2 py-0.5 rounded bg-white/5">React</span>
+              <span className="px-2 py-0.5 rounded bg-white/5">TypeScript</span>
+              <span className="px-2 py-0.5 rounded bg-white/5">Tailwind CSS</span>
+              <span className="px-2 py-0.5 rounded bg-white/5">Three.js</span>
+            </div>
+          </div>
+
+          <div data-reveal="up" className="p-5 sm:p-8 rounded-3xl bg-white/[0.025] border border-white/10 hover:border-white/20 transition-all flex flex-col justify-between">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4">
+                <Zap className="w-5 h-5" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">
+                Rapid AI-Assisted Prototyping
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed mb-4">
+                Leveraging modern AI assistants and targeted prompt techniques to scaffold, test, and ship functional products with velocity. From early requirements to working production interfaces ready for user testing.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-1.5 pt-4 border-t border-white/5 text-xs font-mono text-gray-400">
+              <span className="px-2 py-0.5 rounded bg-white/5">Claude &amp; Cursor</span>
+              <span className="px-2 py-0.5 rounded bg-white/5">Vite</span>
+              <span className="px-2 py-0.5 rounded bg-white/5">Vercel</span>
+              <span className="px-2 py-0.5 rounded bg-white/5">Agile Shipping</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Short "Also experienced in" line replacing bloated agency cards */}
+        <div data-reveal="up" className="mt-6 p-4 md:p-5 rounded-2xl bg-white/[0.015] border border-white/5 flex flex-col sm:flex-row sm:items-center gap-2.5 text-xs font-light text-gray-400">
+          <span className="font-mono text-gray-200 uppercase tracking-wider font-semibold shrink-0">
+            Also experienced in:
+          </span>
+          <span>
+            FastAPI and Node.js REST services, PostgreSQL relational database modeling, automated pytest suites (117+ tests), and basic machine learning signal processing.
+          </span>
+        </div>
       </div>
     </section>
   );
 };
+
 export default ServicesSection;

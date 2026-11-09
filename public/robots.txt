@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ugesh-kumar.vercel.app/sitemap.xml
+
